@@ -145,6 +145,10 @@
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\smLogger.cpp" />
     <ClCompile Include="..\src\smLogger.hpp" />
+    <ClCompile Include="..\src\smGame.cpp" />
+    <ClCompile Include="..\src\smGame.hpp" />
+    <ClCompile Include="..\src\smEventManager.cpp" />
+    <ClCompile Include="..\src\smEventManager.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

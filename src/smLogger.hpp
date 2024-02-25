@@ -13,10 +13,10 @@ class Logger
 {
 private:
     static uint8_t logLevel;
-    Logger() { ; }
-    ~Logger() { ; }
+    Logger();
+    ~Logger();
 public:
-    static void log(std::string _message, uint8_t level);
+    static void log(std::string _message, uint8_t level = LogLevel::all);
     static void debug(std::string _message);
     static void warn(std::string _message);
     static void error(std::string _message);

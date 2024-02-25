@@ -2,7 +2,7 @@
 
 uint8_t Logger::logLevel = LogLevel::all;
 
-void Logger::log(std::string _message, uint8_t level = LogLevel::info) {
+void Logger::log(std::string _message, uint8_t level) {
     if (_message.empty() || !(level & logLevel))
         return;
 
