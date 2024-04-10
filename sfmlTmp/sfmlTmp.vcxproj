@@ -142,13 +142,37 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\main.cpp" />
-    <ClCompile Include="..\src\smLogger.cpp" />
-    <ClCompile Include="..\src\smLogger.hpp" />
-    <ClCompile Include="..\src\smGame.cpp" />
-    <ClCompile Include="..\src\smGame.hpp" />
-    <ClCompile Include="..\src\smEventManager.cpp" />
-    <ClCompile Include="..\src\smEventManager.hpp" />
+    <ClCompile Include="src\smAudioManager.cpp" />
+    <ClCompile Include="src\smBackgroundManager.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\smEventManager.cpp" />
+    <ClCompile Include="src\smGame.cpp" />
+    <ClCompile Include="src\smTextureManager.cpp" />
+    <ClCompile Include="src\smLogger.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\smAudioManager.hpp" />
+    <ClInclude Include="src\smBackgrounds.hpp" />
+    <ClInclude Include="src\smBackgroundManager.hpp" />
+    <ClInclude Include="src\smEventManager.hpp" />
+    <ClInclude Include="src\smGame.hpp" />
+    <ClInclude Include="src\smSoundList.hpp" />
+    <ClInclude Include="src\smTextureManager.hpp" />
+    <ClInclude Include="src\smLogger.hpp" />
+    <ClInclude Include="src\smResources.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\sprite\rock.png" />
+    <Image Include="res\sprite\tails\run0.png" />
+    <Image Include="res\sprite\tails\run1.png" />
+    <Image Include="res\sprite\tails\run2.png" />
+    <Image Include="res\sprite\tails\run3.png" />
+    <Image Include="res\sprite\tails\run4.png" />
+    <Image Include="res\sprite\tails\run5.png" />
+    <Image Include="res\sprite\tails\run6.png" />
+    <Image Include="res\sprite\tails\run7.png" />
+    <Image Include="res\sprite\tails\run8.png" />
+    <Image Include="res\sprite\tails\tails.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

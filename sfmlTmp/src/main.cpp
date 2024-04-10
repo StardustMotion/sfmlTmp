@@ -6,7 +6,7 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "bootleg Sonic haha");
+    sf::RenderWindow window(sf::VideoMode(960, 720), "bootleg Sonic haha");
     window.setFramerateLimit(24);
     Logger::log("exe started");
 
