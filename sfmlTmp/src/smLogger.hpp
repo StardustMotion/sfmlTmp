@@ -2,23 +2,24 @@
 #include <iostream>
 
 namespace LogLevel {
-    const uint8_t info = 0x01;
-    const uint8_t debug = 0x02;
-    const uint8_t warn = 0x04;
-    const uint8_t error = 0x08;
-    const uint8_t all = info | debug | warn | error;
+    const uint8_t error = 0x01;
+    const uint8_t warn = 0x02;
+    const uint8_t info = 0x04;
+    const uint8_t debug = 0x08;
+    const uint8_t all = error | warn | info | debug;
 }
 
 class Logger
 {
 private:
-    static uint8_t logLevel;
     Logger();
     ~Logger();
+    static uint8_t level;
+    static void log(const std::string_view message, uint8_t level);
 public:
-    static void log(std::string _message, uint8_t level = LogLevel::all);
-    static void debug(std::string _message);
-    static void warn(std::string _message);
-    static void error(std::string _message);
-    static void setLogLevel(uint8_t level);
+    static void debug(const std::string_view message);
+    static void info(const std::string_view message);
+    static void warn(const std::string_view message);
+    static void error(const std::string_view message);
+    static void setLevel(uint8_t msgLevel);
 };

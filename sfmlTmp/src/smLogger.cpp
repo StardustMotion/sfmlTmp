@@ -1,31 +1,36 @@
 #include "smLogger.hpp"
 
-uint8_t Logger::logLevel = LogLevel::all;
+Logger::Logger() { ; }
+Logger::~Logger() { ; } // file writing todo
 
-void Logger::log(std::string _message, uint8_t level) {
-    if (_message.empty() || !(level & logLevel))
+uint8_t Logger::level = 0;
+
+void Logger::log(const std::string_view message, uint8_t msgLevel) {
+    if (message.empty() || !(level & msgLevel))
         return;
 
-    if (level == LogLevel::error) _message = "[ERROR] " + _message;
-    else if (level == LogLevel::debug) _message = "[DEBUG] " + _message;
-    else if (level == LogLevel::warn) _message = "[WARN] " + _message;
-    else  _message = "[INFO] " + _message;
-
-    std::cout << _message << std::endl;
+    std::string prefix;
+    switch (msgLevel) {
+        case LogLevel::debug: prefix = "<DEBUG>"; break;
+        case LogLevel::info: prefix = "~INFO~"; break;
+        case LogLevel::warn: prefix = "* WARNING *"; break;
+        case LogLevel::error: prefix = "# ERROR #"; break;
+    }
+    std::cout << prefix << " " << message << std::endl;
 }
 
-void Logger::debug(std::string _message) {
-    log(_message, LogLevel::debug);
+void Logger::debug(const std::string_view message) {
+    log(message, LogLevel::debug);
 }
-
-void Logger::warn(std::string _message) {
-    log(_message, LogLevel::warn);
+void Logger::info(const std::string_view message) {
+    log(message, LogLevel::info);
 }
-
-void Logger::error(std::string _message) {
-    log(_message, LogLevel::error);
+void Logger::warn(const std::string_view message) {
+    log(message, LogLevel::warn);
 }
-
-void Logger::setLogLevel(uint8_t level) {
-    logLevel = level;
+void Logger::error(const std::string_view message) {
+    log(message, LogLevel::error);
+}
+void Logger::setLevel(uint8_t msgLevel) {
+    level = msgLevel;
 }

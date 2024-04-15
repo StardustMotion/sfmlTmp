@@ -11,15 +11,25 @@
 class AudioManager
 {
 private:
-	std::string currStreamPath;
-	sf::Music stream;
-	sf::SoundBuffer* buffers;
-	sf::Sound sound;
+	bool		isEnabled;
+
+	std::string musicFile;
+	sf::Music	music;
+
 public:
-	int changemus(std::string file);
-	int playsound(SoundList sfx);
-	void loadAllSounds();
+	bool playMusic(std::string const& filePath);
+	//bool playSound(std::string& filePath);
 	AudioManager();
 	~AudioManager();
+
+//private:
+//	std::string currStreamPath;
+//	sf::Music stream;
+//	sf::SoundBuffer* buffers;
+//	sf::Sound sound;
+//public:
+//	int changemus(std::string file);
+//	int playsound(SoundList sfx);
+//	void loadAllSounds();
 };
 
