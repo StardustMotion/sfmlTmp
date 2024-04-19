@@ -1,9 +1,10 @@
 #include "smGame.hpp"
 #include <SFML/Window/Event.hpp>
+#include "smInputVirtual.hpp"
 
 Game::Game(Window& window) :
 	window(window),
-	audioManager(),
+	audio(),
 	inputManager(window) {
 
 	run();
@@ -14,10 +15,22 @@ Game::~Game() { ; }
 void Game::run() {
 	Logger::info("\n===================\nStarting up...\n===================");
 	inputManager.setupBindings();
+	InputVirtual& inputs = inputManager.inputs;
 	while (window.isRunning()) {
 
-		inputManager.poll(); // game loop tic 
-		
+		inputManager.poll(); // game loop tic
+		if (inputs.check(InputVirtual::B)) {
+			audio.sound(audio::SFX::DASH);
+		}
+		else if (inputs.check(InputVirtual::C)) {
+			audio.sound(audio::SFX::MET);
+		}
+		else if (inputs.check(InputVirtual::START)) {
+			audio.music(audio::BGM::MAIN);
+		}
+		else if (inputs.check(InputVirtual::A)) {
+			audio.noMusic();
+		}
 	}
 }
 
@@ -30,27 +43,6 @@ void Game::run() {
 //Game::~Game() { ; }
 //
 //
-//void Game::showTails(sf::Sprite& tails, TailsState state) {
-//    if (state == Game::TailsState::STOP) {
-//        if (abs(speed) <= 2.0f) {
-//            speed = 0;
-//            tails.setTextureRect(sf::IntRect(0, 0, 48, 32));
-//            tailsAnimation = 0;
-//        }
-//        else speed = speed * 0.9f;
-//    }
-//    tailsRefresh++;
-//    if (tailsRefresh > 2 && speed) {
-//        tailsAnimation = 1 + (tailsAnimation % 8);
-//        tailsRefresh = 0;
-//    }
-//    if ((state == Game::TailsState::RIGHT) && speed < 8.0f) speed += 0.5f;
-//    else if ((state == Game::TailsState::LEFT) && speed > -8.0f) speed -= 0.5f;
-//
-//    tails.move(speed, 0.0f);
-//    if (state != Game::TailsState::STOP) tails.setScale((state == Game::TailsState::RIGHT ? 2.0f : -2.0f), 2.0f);
-//    tails.setTextureRect(sf::IntRect(48 * tailsAnimation, 0, 48, 32));
-//}
 //
 //void Game::run() {
 //

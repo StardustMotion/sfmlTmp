@@ -1,1 +1,0 @@
-#include "smBackgroundManager.hpp"

@@ -6,30 +6,20 @@
 #include <SFML/System/Sleep.hpp>
 #include "smLogger.hpp"
 #include "smResources.hpp"
-#include "smSoundList.hpp"
+#include "smAudio.hpp"
 
 class AudioManager
 {
-private:
-	bool		isEnabled;
-
-	std::string musicFile;
-	sf::Music	music;
-
+	bool isEnabled;
+	std::string_view musicFile;
+	sf::Music stream;
+	sf::Sound sfSound;
+	std::array<sf::SoundBuffer,static_cast<std::size_t>(audio::SFX::SFX_SIZE)> buffers;
 public:
-	bool playMusic(std::string const& filePath);
-	//bool playSound(std::string& filePath);
 	AudioManager();
 	~AudioManager();
-
-//private:
-//	std::string currStreamPath;
-//	sf::Music stream;
-//	sf::SoundBuffer* buffers;
-//	sf::Sound sound;
-//public:
-//	int changemus(std::string file);
-//	int playsound(SoundList sfx);
-//	void loadAllSounds();
+	void music(audio::BGM const bgm);
+	void noMusic();
+	void sound(audio::SFX const sfx);
 };
 

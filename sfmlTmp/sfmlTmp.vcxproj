@@ -145,11 +145,9 @@
   <ItemGroup>
     <ClCompile Include="src\smWindow.cpp" />
     <ClCompile Include="src\smAudioManager.cpp" />
-    <ClCompile Include="src\smBackgroundManager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\smInputManager.cpp" />
     <ClCompile Include="src\smGame.cpp" />
-    <ClCompile Include="src\smTextureManager.cpp" />
     <ClCompile Include="src\smLogger.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -157,11 +155,9 @@
     <ClInclude Include="src\smWindow.hpp" />
     <ClInclude Include="src\smAudioManager.hpp" />
     <ClInclude Include="src\smBackgrounds.hpp" />
-    <ClInclude Include="src\smBackgroundManager.hpp" />
     <ClInclude Include="src\smInputManager.hpp" />
     <ClInclude Include="src\smGame.hpp" />
-    <ClInclude Include="src\smSoundList.hpp" />
-    <ClInclude Include="src\smTextureManager.hpp" />
+    <ClInclude Include="src\smAudio.hpp" />
     <ClInclude Include="src\smLogger.hpp" />
     <ClInclude Include="src\smResources.hpp" />
   </ItemGroup>

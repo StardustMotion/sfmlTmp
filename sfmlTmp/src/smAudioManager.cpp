@@ -1,49 +1,36 @@
 #include "smAudioManager.hpp"
+#include <string>
+#include <string_view>
 
-AudioManager::AudioManager() {
-	isEnabled = true;
-	/*buffers = new sf::SoundBuffer[static_cast<size_t>(SoundList::A_SOUNDS_TYPE_SIZE)];
-	for (int i = 0; i < static_cast<size_t>(SoundList::A_SOUNDS_TYPE_SIZE); i++)
-	        buffers[i] = sf::SoundBuffer();
-	
-
-	loadAllSounds();*/
+AudioManager::AudioManager():
+	isEnabled(true) {
+	for (std::size_t i{ 0 }; i < static_cast<std::size_t>(audio::SFX::SFX_SIZE); ++i) {
+		buffers[i] = sf::SoundBuffer(); // new
+		Logger::info("Loading sound..." + std::string(audio::sfx[i]));
+		buffers[i].loadFromFile(std::string(audio::sfx[i]));
+	}
 }
-AudioManager::~AudioManager() { ; }
+AudioManager::~AudioManager() { ; } // delete[] buffers
 
-bool AudioManager::playMusic(std::string const& filePath) {
-	if (!isEnabled || (filePath == musicFile)) 
-		return 1;
-
-	music.stop();
-	music.openFromFile(filePath);
-	music.play();
-	music.setLoop(true);
-	music.setPitch(1.0f);
-
-	musicFile = filePath;
-	return 0;
+void AudioManager::music(audio::BGM const bgm) {
+	auto filePath = std::string(audio::bgm[static_cast<size_t>(bgm)]);
+	if (!isEnabled || (filePath == musicFile))
+		return;
+	stream.stop();
+	Logger::info("Playing BGM " + filePath);
+	stream.openFromFile(filePath);
+	stream.play();
+	stream.setLoop(true);
+	stream.setPitch(1.0f);
 }
-
-//int AudioManager::playsound(SoundList sfx) {
-//    sound.setBuffer(buffers[static_cast<size_t>(sfx)]);
-//    sound.play();
-//    return 0;
-//}
-//
-//void AudioManager::loadAllSounds() {
-//    buffers[static_cast<size_t>(SoundList::A_DASH)].loadFromFile(Resources::A_DASH);
-//    buffers[static_cast<size_t>(SoundList::A_METWAVE)].loadFromFile(Resources::A_METWAVE);
-//}
-//
-//AudioManager::AudioManager() {
-//    buffers = new sf::SoundBuffer[static_cast<size_t>(SoundList::A_SOUNDS_TYPE_SIZE)];
-//
-//    for (int i = 0; i < static_cast<size_t>(SoundList::A_SOUNDS_TYPE_SIZE); i++)
-//        buffers[i] = sf::SoundBuffer();
-//
-//    loadAllSounds();
-//}
-//AudioManager::~AudioManager() { 
-//    delete[] buffers;
-//}
+void AudioManager::noMusic() {
+	if (!isEnabled) return;
+	Logger::info("Stopping BGM");
+	stream.stop();
+}
+void AudioManager::sound(audio::SFX const sfx) {
+	if (!isEnabled) 
+		return;
+	sfSound.setBuffer(buffers[static_cast<std::size_t>(sfx)]);
+	sfSound.play();
+}

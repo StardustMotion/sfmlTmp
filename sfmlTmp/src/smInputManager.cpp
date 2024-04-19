@@ -3,9 +3,11 @@
 #include "smLogger.hpp"
 
 InputManager::InputManager(Window& window):
-    window(*(window.getWindow())) {
-    keyboard.fill(false);
-    mouse.fill(false);
+    window(*(window.getWindow())),
+    inputs(),
+    keyboard{},
+    mouse{},
+    bindings{sf::Keyboard::Key::Unknown} {
 }
 
 InputManager::~InputManager() { ; }
@@ -15,7 +17,6 @@ InputEvent::InputEvent(InputDevice device, uint8_t id, bool state):
     id(id),
     state(state) {
 }
-InputEvent::~InputEvent() { ; }
 
 /**
 * returns true if quitting the game
@@ -28,16 +29,16 @@ void InputManager::poll() {
     while (window.pollEvent(event)) {
         if (event.type == sf::Event::EventType::KeyPressed) {
             if (event.key.code != sf::Keyboard::Key::Unknown) {
-                inputEvents.emplace_back(InputDevice::KEYBOARD, event.key.code, true);
+                inputEvents.emplace_back(InputEvent::KEYBOARD, event.key.code, true);
             }
         } else if (event.type == sf::Event::EventType::KeyReleased) {
             if (event.key.code != sf::Keyboard::Key::Unknown) {
-                inputEvents.emplace_back(InputDevice::KEYBOARD, event.key.code, false);
+                inputEvents.emplace_back(InputEvent::KEYBOARD, event.key.code, false);
             }
         } else if (event.type == sf::Event::EventType::MouseButtonPressed) {
-            inputEvents.emplace_back(InputDevice::MOUSE, event.mouseButton.button, true);
+            inputEvents.emplace_back(InputEvent::MOUSE, event.mouseButton.button, true);
         } else if (event.type == sf::Event::EventType::MouseButtonReleased) {
-            inputEvents.emplace_back(InputDevice::MOUSE, event.mouseButton.button, false);
+            inputEvents.emplace_back(InputEvent::MOUSE, event.mouseButton.button, false);
         } else if (event.type == sf::Event::LostFocus) {
             Logger::debug("Lost window focus");
             isFocus = false;
@@ -51,13 +52,14 @@ void InputManager::poll() {
     }
 
     for (const auto& [device, id, state] : inputEvents) {
-        if (device == InputDevice::KEYBOARD) {
+        if (device == InputEvent::KEYBOARD) {
             auto it = std::find(bindings.begin(), bindings.end(), id);
             if (it != std::end(bindings)) {
                 std::size_t index = std::distance(bindings.begin(), it);
-                InputVirtual::state[index] = state;
+                inputs.event(static_cast<InputVirtual::Event>(index), state);
                 Logger::debug(std::string(state ? "-->" : "<--") + " Key " + 
                     std::to_string(id) + " (" + std::string(InputVirtual::descriptions[index]) + ")");
+
             }
         } else { // MOUSE
            // ...

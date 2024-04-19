@@ -6,17 +6,16 @@
 #include "smInputVirtual.hpp"
 #include <array>
 
-enum class InputDevice : bool {
-	KEYBOARD, MOUSE
-};
 
 struct InputEvent {
+	enum InputDevice : bool {
+		KEYBOARD, MOUSE
+	};
 	const InputDevice device;
 	const uint8_t id;
-	const bool state;
+	const bool state; // press-hold-release later
 	// payload; // mouse position i.e
 	InputEvent(InputDevice device, uint8_t id, bool state);
-	~InputEvent();
 };
 
 class InputManager
@@ -33,9 +32,13 @@ private:
 	//    index = game/virtual key(InputVirtual::)     |||      value = hardware key
 	std::array<sf::Keyboard::Key, InputVirtual::SIZE> bindings;
 
+
 public:
 	InputManager(Window& window);
 	~InputManager();
+	
+	InputVirtual inputs; // for now 1P
+
 	void poll();
 	void setupBindings();
 };
