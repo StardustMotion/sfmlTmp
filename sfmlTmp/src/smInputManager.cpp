@@ -6,8 +6,8 @@ InputManager::InputManager(Window& window):
     window(*(window.getWindow())),
     inputs(),
     keyboard{},
-    mouse{},
-    bindings{sf::Keyboard::Key::Unknown} {
+    mouse{} {
+    setupBindings();
 }
 
 InputManager::~InputManager() { ; }

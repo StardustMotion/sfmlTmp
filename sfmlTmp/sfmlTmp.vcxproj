@@ -115,7 +115,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;SFML_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\ui\Desktop\onb\playground\sfmlTmp\extern\SFML\include</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -143,6 +143,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\smScene.cpp" />
+    <ClCompile Include="src\smImageManager.cpp" />
     <ClCompile Include="src\smWindow.cpp" />
     <ClCompile Include="src\smAudioManager.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -151,6 +153,9 @@
     <ClCompile Include="src\smLogger.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\smScene.hpp" />
+    <ClInclude Include="src\smImage.hpp" />
+    <ClInclude Include="src\smImageManager.hpp" />
     <ClInclude Include="src\smInputVirtual.hpp" />
     <ClInclude Include="src\smWindow.hpp" />
     <ClInclude Include="src\smAudioManager.hpp" />

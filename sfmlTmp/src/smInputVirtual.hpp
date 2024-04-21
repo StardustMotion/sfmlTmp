@@ -30,10 +30,10 @@ struct InputVirtual {
 		sf::Keyboard::Key::Enter
 	};
 
-	void print() {
+	void print() const {
 		Logger::info("State " + state[0] + state[1] + state[2] + state[3] + state[4] + state[5] + state[6] + state[7]);
 	}
-	bool check(const Event event) { 
+	bool check(const Event event) const { 
 		return state[event]; 
 	}
 	void event(const Event event, bool status) { 

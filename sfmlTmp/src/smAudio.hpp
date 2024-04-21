@@ -3,14 +3,15 @@
 #include <array>
 
 namespace audio {
+	constexpr std::string_view root = "res/audio/";
 	enum class BGM {
 		MAIN,
 		MAIN2,
 		BGM_SIZE
 	};
 	constexpr static std::array<std::string_view, static_cast<size_t>(BGM::BGM_SIZE)> bgm {
-		"res/audio/main.ogg",
-		"res/audio/main2.ogg"
+		"main.ogg",
+		"main2.ogg"
 	};
 	enum class SFX {
 		MET,
@@ -18,7 +19,7 @@ namespace audio {
 		SFX_SIZE
 	};
 	constexpr std::array <std::string_view, static_cast<size_t>(SFX::SFX_SIZE)> sfx{
-		"res/audio/met.wav",
-		"res/audio/dash.ogg"
+		"met.wav",
+		"dash.ogg"
 	};
 }
