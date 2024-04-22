@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <string>
 
 namespace LogLevel {
     const uint8_t error = 0x01;
@@ -23,3 +24,9 @@ public:
     static void error(const std::string_view message);
     static void setLevel(uint8_t msgLevel);
 };
+
+/// quick "to_string" alias for 
+template <typename T>
+std::string tos(T element) {
+    return std::to_string(element);
+}

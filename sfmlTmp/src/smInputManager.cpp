@@ -2,8 +2,8 @@
 #include <SFML/Window/Event.hpp>
 #include "smLogger.hpp"
 
-InputManager::InputManager(Window& window):
-    window(*(window.getWindow())),
+InputManager::InputManager(sf::RenderWindow& window):
+    window(window),
     inputs(),
     keyboard{},
     mouse{} {

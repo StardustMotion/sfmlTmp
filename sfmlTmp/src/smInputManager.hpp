@@ -34,7 +34,7 @@ private:
 
 
 public:
-	InputManager(Window& window);
+	InputManager(sf::RenderWindow& window);
 	~InputManager();
 	
 	InputVirtual inputs; // for now 1P

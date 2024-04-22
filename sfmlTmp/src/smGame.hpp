@@ -9,17 +9,17 @@
 #include "smWindow.hpp"
 #include "smInputManager.hpp"
 #include "smImageManager.hpp"
-#include "smScene.hpp"
+#include "smSonicScene.hpp"
 
 class Game final
 {
 private:
-	Window& window;
+	sf::RenderWindow& window;
+	std::unique_ptr<sf::RenderTexture> canvas;
 	AudioManager audio;
 	InputManager inputManager; // "inputs" for virtual inputs
 	ImageManager img;
-	Scene scene;
-	std::unique_ptr<sf::RenderTexture> canvas;
+	SonicScene scene;
 
 public:
 	Game(Window& window);

@@ -7,10 +7,7 @@ class Window
 public:
 	Window();
 	~Window();
-	sf::RenderWindow* getWindow();
-	void init(const std::string& title);
-	bool isRunning();
-private:
-	sf::RenderWindow* window{ nullptr };
+	std::unique_ptr<sf::RenderWindow> renderWindow;
+	void init(const std::string& title, uint16_t x = 960, uint16_t y = 720);
 };
 

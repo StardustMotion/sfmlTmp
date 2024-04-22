@@ -11,7 +11,9 @@ void Logger::log(const std::string_view message, uint8_t msgLevel) {
 
     std::string prefix;
     switch (msgLevel) {
-        case LogLevel::debug: prefix = "<DEBUG>"; break;
+        case LogLevel::debug: 
+            std::cerr << "<DEBUG> " << message << std::endl; // cerr prints before a crash occurs
+            return;
         case LogLevel::info: prefix = "~INFO~"; break;
         case LogLevel::warn: prefix = "* WARNING *"; break;
         case LogLevel::error: prefix = "# ERROR #"; break;

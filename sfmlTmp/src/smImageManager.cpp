@@ -1,7 +1,7 @@
 #include "smImageManager.hpp"
 #include "smLogger.hpp"
 
-// defers texture loading when actually used later
+// maybe later defer texture loading (i.e on new scene load)
 ImageManager::ImageManager() {
 	for (int id{ 0 }; id < static_cast<std::size_t>(image::Id::IMG_SIZE); ++id) {
 		load(static_cast<image::Id>(id));
@@ -23,6 +23,8 @@ std::shared_ptr<sf::Texture> ImageManager::load(image::Id imgId) {
 	Logger::info((texture->loadFromFile(filePath) ? 
 		"Loaded image " : "Failed to load image ") + filePath);
 
+	texture->setRepeated(true);
+	//texture->setSmooth(true);
 	cache.push_back(CachedTexture{imgId, texture});
 
 	Logger::debug("image buffer is now size " + std::to_string(cache.size()));

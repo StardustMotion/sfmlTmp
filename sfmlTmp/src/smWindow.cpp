@@ -2,29 +2,17 @@
 #include "smLogger.hpp"
 
 Window::Window() { ; }
-Window::~Window() {
-	delete window;
-}
+Window::~Window() { ; }
 
-sf::RenderWindow* Window::getWindow() {
-	return window;
-}
 
-void Window::init(const std::string& title) {
+void Window::init(const std::string& title, uint16_t x, uint16_t y) {
 	Logger::debug("Init window...");
-	if (window)
-		delete window;
-	window = nullptr;
 
 	// camera/view
 
 	// ANDROID checks?
 
-	window = new sf::RenderWindow(sf::VideoMode(960, 720), title);
-	window->setFramerateLimit(48);
+	renderWindow = std::make_unique<sf::RenderWindow>(sf::VideoMode(x, y), title);
+	renderWindow->setFramerateLimit(60);
 	//window->setIcon
-}
-
-bool Window::isRunning() {
-	return window->isOpen();
 }
