@@ -8,6 +8,7 @@ public:
 	Window();
 	~Window();
 	std::unique_ptr<sf::RenderWindow> renderWindow;
-	void init(const std::string& title, uint16_t x = 960, uint16_t y = 720);
+	sf::Vector2f win{ 960, 720 }; // size
+	void init(const std::string& title);
 };
 

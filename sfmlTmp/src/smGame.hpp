@@ -14,7 +14,8 @@
 class Game final
 {
 private:
-	sf::RenderWindow& window;
+	sf::Vector2f& win;
+	sf::RenderWindow& renderWindow;
 	std::unique_ptr<sf::RenderTexture> canvas;
 	AudioManager audio;
 	InputManager inputManager; // "inputs" for virtual inputs

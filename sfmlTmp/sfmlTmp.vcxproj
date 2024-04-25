@@ -143,7 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\smBackground.cpp" />
+    <ClCompile Include="src\smParallax.cpp" />
     <ClCompile Include="src\smSonicScene.cpp" />
     <ClCompile Include="src\smImageManager.cpp" />
     <ClCompile Include="src\smWindow.cpp" />
@@ -154,14 +154,13 @@
     <ClCompile Include="src\smLogger.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\smBackground.hpp" />
+    <ClInclude Include="src\smParallax.hpp" />
+    <ClInclude Include="src\smRandom.hpp" />
     <ClInclude Include="src\smSonicScene.hpp" />
-    <ClInclude Include="src\smImage.hpp" />
     <ClInclude Include="src\smImageManager.hpp" />
     <ClInclude Include="src\smInputVirtual.hpp" />
     <ClInclude Include="src\smWindow.hpp" />
     <ClInclude Include="src\smAudioManager.hpp" />
-    <ClInclude Include="src\smBackgrounds.hpp" />
     <ClInclude Include="src\smInputManager.hpp" />
     <ClInclude Include="src\smGame.hpp" />
     <ClInclude Include="src\smAudio.hpp" />
