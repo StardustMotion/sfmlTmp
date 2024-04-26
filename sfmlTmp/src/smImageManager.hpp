@@ -6,16 +6,17 @@
 
 
 namespace image {
-	constexpr std::string_view root = "res/img/parallax/";
+	//constexpr std::string_view root = "res/img/parallax/";
 
 	// In no particular order for now
 	enum Files {
-		FILES_START = -1,
 		WILYWARS_PARALLAX,
+		WILYWARS_CRASHMAN,
 		FILES_SIZE
 	};
-	constexpr std::array<std::string_view, FILES_SIZE> files{
-		"wilywars_parallaxes.png"
+	constexpr std::array<std::string_view, FILES_SIZE> files {
+		"res/img/parallax/wilywars_parallaxes.png",
+		"res/img/actor/ww_crash.png",
 	};
 
 }

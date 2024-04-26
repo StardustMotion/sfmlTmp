@@ -20,7 +20,7 @@ std::shared_ptr<sf::Texture> ImageManager::load(const image::Files imgId) {
 			return data.texture;
 
 	std::shared_ptr texture = std::make_shared<sf::Texture>();
-	std::string filePath = std::string(image::root) + std::string(image::files[imgId]);
+	std::string filePath = std::string(image::files[imgId]);
 	Logger::info((texture->loadFromFile(filePath) ? 
 		"Loaded image " : "Failed to load image ") + filePath);
 

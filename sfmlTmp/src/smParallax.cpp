@@ -19,15 +19,15 @@ void Parallax::draw(sf::RenderTexture& canvas) {
 	// draw right to left, bottom to top
 	float xBase, yBase;
 	if (speed < 1.f) {
-		xBase = (center.x + size.x) - std::fmod(center.x * speed, bgSize.x);
+		xBase = (center.x + size.x) - std::fmod((center.x-offset.x) * speed, bgSize.x);
 		xBase += std::ceilf(((center.x + size.x) - xBase) / bgSize.x) * bgSize.x;
 
-		yBase = (center.y + size.y) + std::fmod(center.y * speed, bgSize.y);
+		yBase = (center.y + size.y) - std::fmod((center.y-offset.y) * speed, bgSize.y);
 		yBase += std::ceilf(((center.y + size.y) - yBase) / bgSize.y) * bgSize.y;
 	}
 	else {
-		xBase = center.x + size.x + bgSize.x - std::fmod(center.x, bgSize.x);
-		yBase = center.y + size.y + std::fmod(center.y, bgSize.y);
+		xBase = center.x + size.x + bgSize.x - std::fmod(center.x-offset.x, bgSize.x);
+		yBase = center.y + size.y + bgSize.y - std::fmod(center.y-offset.y, bgSize.y);
 	}
 
 	for (float x{ xBase }; x > (center.x - size.x) - bgSize.x; x -= bgSize.x) {
@@ -39,6 +39,6 @@ void Parallax::draw(sf::RenderTexture& canvas) {
 }
 
 void Parallax::shift(float x, float y = 0) {
-	offset = { std::fmod(offset.x + x, bgSize.x) , std::fmod(offset.y + y, bgSize.y) };
+	offset += { x, y };
 }
 

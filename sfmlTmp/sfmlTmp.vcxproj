@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\smActor.cpp" />
     <ClCompile Include="src\smParallax.cpp" />
     <ClCompile Include="src\smSonicScene.cpp" />
     <ClCompile Include="src\smImageManager.cpp" />
@@ -154,6 +155,7 @@
     <ClCompile Include="src\smLogger.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\smActor.hpp" />
     <ClInclude Include="src\smParallax.hpp" />
     <ClInclude Include="src\smRandom.hpp" />
     <ClInclude Include="src\smSonicScene.hpp" />
