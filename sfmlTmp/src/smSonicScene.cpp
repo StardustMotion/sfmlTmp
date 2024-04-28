@@ -9,7 +9,8 @@ SonicScene::SonicScene(const sf::Vector2f& win, const ImageManager& img, const I
 		{ win, img, static_cast<Parallaxes::Parallax>(Random::get(0,2)) },
 		{ win, img, Parallaxes::WW_TOP } 
 	}
-		, actors{ {img} } {
+	, player{ inputs, img } {
+
 
 	if (font.loadFromFile("res/font/sonic.ttf")) {
 		Logger::info("font loaded");
@@ -24,8 +25,7 @@ void SonicScene::onDraw(sf::RenderTexture& canvas) {
 	for (auto& parallax : backgrounds)
 		parallax.draw(canvas);
 
-	for (auto& actor : actors)
-		actor.draw(canvas);
+	canvas.draw(player.getSprite());
 	
 	sf::Text hud{ "[" + tos((int)camera.x) + ", " + tos((int)-camera.y) + "]", font, 24 };
 	hud.setFillColor(sf::Color::White);
@@ -34,22 +34,12 @@ void SonicScene::onDraw(sf::RenderTexture& canvas) {
 	canvas.draw(hud);
 }
 
-void SonicScene::onUpdate() {
-	if (inputs.check(InputVirtual::LEFT)) {
-		moveView(-camSpeed, 0);
-	}
-	else if (inputs.check(InputVirtual::RIGHT)) {
-		moveView(camSpeed, 0);
-	}
-	if (inputs.check(InputVirtual::UP)) {
-		moveView(0, -camSpeed);
-	}
-	else if (inputs.check(InputVirtual::DOWN)) {
-		moveView(0, camSpeed);
-	}
+void SonicScene::onUpdate(double deltaT) {
 
 	for (auto& parallax : backgrounds)
-		parallax.shift(-2.f, 0);
+		parallax.update(deltaT);
+
+	player.update(deltaT);
 }
 
 void SonicScene::moveView(float x, float y) {

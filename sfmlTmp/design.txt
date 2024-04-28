@@ -1,0 +1,163 @@
+> the possibility of making a 2ND game is not to forget
+
+
+------------------------------------------
+MEMORYSTORY
+MEMORY ???
+SONIC : REMINISCENCE
+------------------------------------------
+> Sonic mode
+	
+	- Control an Emerl through Sonic-like stages. A zone is one center and 4 areas around. 
+		1 BGM for center, 1 for suburbs. Center has less monster (if any) and more shops or so.
+		Different tileset for center and suburbs. Different parallaxes in each suburb, maybe the second half overlapping with next zone.
+
+		Any area has some path to go from north <-> south to east <-> west. This change level structure, parallax and destination.
+		Area travel must be beautiful through eye candy.
+
+	- Enemy silouette (or visible) appears in some places of the area. Contact with it :
+		- If area level is too high, the silhouette jumps to catch you on higher radius and trigger fight. Also trigger enemy preemptive strike.
+		- If area level around your level, only trigger on direct contact. Might trigger enemy preemptive stike randomly.
+		- If area level below your level, won't trigger unless explicit by pressing UP or smthing
+		- Press attack button right before contact to do a preemptive strike. 
+
+	- Early Emerl has low run speed, low jump height, but maps are easy. He gets upgrades in some places of the game. Upgrades include
+		> Run Speed : from 1 to 5 levels, or so
+		> Jump height : from 1 to 3 or so
+		> Air tricks : choose [1,2] among a few (Sonic Advance)
+		> Attack : allows to preemptive strike, from 1 to 3 level or so. Also destroys certain obstacle
+		> Air action : gliding, thok attack, etc.
+		> Special moves : double tap to dash, peel out, sudden stop, etc.		
+		- Some later stages might require certain upgrades to pass.
+	
+	- Stages have rings that you get to keep upon leaving area
+		Getting hit by hazard drops a certain amount depending on the hazard and are lost. Damages your RPG units directly if you 
+		don't have enough rings to tank (damage that ignores RPG defense, does in % ?) If RPG units all die, go to last save (wipeout).
+		Pits might do a lot of damage, not sure.
+		Later stages have more rings but also more hazards.
+		Cross an area with decent time to get bonus rings maybe. Rings have a respawn timer that triggers on area leave.
+
+	- Contain [RING] resource, the main money of the game
+	- Contain certain [RESOURCE] obtainable specific to some areas
+
+> RPG mode
+	
+	- Start a fight in an area with up to 4 units in late game. 
+	- RPG stats include strength/mind, speed, initiative, prospection etc
+	- RPG fights give [EXPERIENCE] resource. Amount is most effective when the unit is close to enemy level (like Dofus)
+		- Experience increases level, which increases basic stats.
+		- Also might "evolve" or something at some point, giving new abilities or passives to the unit
+	- RPG fights also drop [RESOURCE] to create equipment or tools.
+------------------------------------------------------
+RESOURCE and RING allow to buy or create stuff.
+> Certain Emerl enhancements
+> Certain equipments for units
+> Unlock (alternatives), areas, or difficulties (like version SP / X or enemies similar to units)
+> Certain units...?
+	
+
+
+
+
+
+----------------------------------------------------
+
+
+- Night/day time maybe but no gameplay influence. Also influence by realism? (mostly cities etc)
+- Some eco-system about resource respawn or something?
+- Equipment visible overworld/inbattle.
+- Drop ressources/cueillettes a la dofus
+- "Soft puissance max" : eveil, level max, competences maxes...
+- "Puissance illimitée" : runes SW, jets items dofus
+	> Jeux avec progression locale, globale, non progression
+> Dofus game echiquier
+
+------------------ 
+Modes
+
+SINGLE PLAYER
+	+ MISSION/ADVENTURE open world map with game progression.
+	+ ARCADE
+		A "quick game" with no game progression and "fixed entities" with a boss at the end or something.
+		Maybe some sort of reward that goes into your adventure in some way? (at least cosmetic?)
+
+		Objective : defeat all enemy troops then reach the end to fight the final troop to complete act
+			> Can be defeated in RPG battle
+			> Can lose on overworld?
+
+MULTIPLAYER
+	+ ONLINE MISSION : ?
+	+ ARCADE  to define exactly how it'd work
+			2 players : each have 4 units
+			3 players : each have 3 untis
+			4 players: each have 2 units
+			8 playrers : each have 1 unit
+		Can only access to characters and zone everyone unlocked.
+		Cooperation/PVP ?
+
+
+
+
+
+-------------------------------
+> RPG section
+
+> Sonic / genesis heavy theme (16-bit)
+	> "world map à la sonic"
+	> rpg sections?
+
+
+> Arcade / sonic, with progression
+
+> "Individual games" vs. progression?
+
+> Modular zones
+	> Enemies can exist in several power
+
+> online mode for bonus xp
+
+> parallax/beautiful environment based
+	> tileset mix turned to sonic curves from wily wars
+
+
+> day/night system
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+list<frame>
+run1, run2, run3, jump1, jump2, fire1, fire2, fire3
+
+
+
+
+animation
+	name
+	list<frame> = run1, run2, run3
+	direction = normal, reverse, roundtrip
+
+
+
+Frame = x y w h
+
+
+Animation:
+	name/id
+	direction?
+	list<frame + duration>
+
+AnimationManager
+	list<Annimation>
+	gere le status de l'aniamtion a afficher (time, etc)

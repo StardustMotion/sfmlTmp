@@ -10,13 +10,15 @@ namespace image {
 
 	// In no particular order for now
 	enum Files {
-		WILYWARS_PARALLAX,
+		WILYWARS_METALMAN,
 		WILYWARS_CRASHMAN,
+		WILYWARS_PARALLAX,
 		FILES_SIZE
 	};
 	constexpr std::array<std::string_view, FILES_SIZE> files {
-		"res/img/parallax/wilywars_parallaxes.png",
-		"res/img/actor/ww_crash.png",
+		"res/texture/actor/ww_metal.png",
+		"res/texture/actor/ww_crash.png",
+		"res/texture/parallax/wilywars_parallaxes.png",
 	};
 
 }

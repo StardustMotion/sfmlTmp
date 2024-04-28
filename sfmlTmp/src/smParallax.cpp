@@ -42,3 +42,7 @@ void Parallax::shift(float x, float y = 0) {
 	offset += { x, y };
 }
 
+void Parallax::update(double deltaT) {
+	//this->shift(-2.f, 0);
+}
+

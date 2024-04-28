@@ -31,7 +31,7 @@ public:
 	/**
 	* @brief update game state/logic
 	**/
-	void update();
+	void update(double deltaT);
 
 	/**
 	* @brief lend a blank canvas to the scene to draw everything on, then transplant canvas to the final window

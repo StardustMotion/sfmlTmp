@@ -47,4 +47,5 @@ public:
 	*/
 	void draw(sf::RenderTexture& canvas);
 	void shift(const float x, const float y);
+	void update(double deltaT);
 };

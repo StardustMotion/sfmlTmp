@@ -23,16 +23,29 @@ Game::~Game() { ; }
 
 // single threaded for now
 void Game::run() {
-	Logger::info("\n===================\nStarting up...\n===================");
+	double fps = 30.0;
+	double deltaT = 1.0 / fps;
+	Logger::info("\n===================\nStarting up (" + tos(fps) + " FPS)...\n================== = ");
+	sf::Clock clock;
+	clock.restart();
+
+	uint64_t frameCount{};
+
 	while (renderWindow.isOpen()) {
-		inputManager.poll(); // gameloop tic + input check
-		update(); // game logic
-		render();
+		inputManager.poll(); // gameloop tic/sleep() + input check
+		frameCount++;
+		this->update(deltaT); // game logic
+		this->render();
+
 	}
+	float finalTime = clock.getElapsedTime().asSeconds();
+	Logger::info("\n===================\nGame end\n===================\nTime elapsed : " 
+		+ tos(finalTime) +
+		"\nFrames : " + tos(frameCount) + " (" + tos(frameCount/ finalTime) + ")");
 }
 
-void Game::update() {
-	scene.onUpdate();
+void Game::update(double deltaT) {
+	scene.onUpdate(deltaT);
 }
 
 void Game::render() {
