@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "smImageManager.hpp"
-#include "smInputVirtual.hpp"
+#include "smVirtualInput.hpp"
 #include "smAudioManager.hpp"
 #include "smParallax.hpp"
 #include "smRandom.hpp"
@@ -12,7 +12,7 @@
 class SonicScene
 {
 	const ImageManager& img;
-	const InputVirtual& inputs;
+	const VirtualInput& inputs;
 	AudioManager& audio;
 
 	std::vector<Parallax> backgrounds;
@@ -22,7 +22,7 @@ class SonicScene
 	sf::Font font;
 	Player player;
 public:
-	SonicScene(const sf::Vector2f& win, const ImageManager& img, const InputVirtual& inputs, AudioManager& audio);
+	SonicScene(const sf::Vector2f& win, const ImageManager& img, const VirtualInput& inputs, AudioManager& audio);
 	~SonicScene();
 	void onUpdate(double deltaT);
 	void onDraw(sf::RenderTexture& canvas);

@@ -4,7 +4,7 @@
 #include <SFML/Graphics/RenderTexture.hpp>
 #include "smImageManager.hpp"
 #include "smSpriteManager.hpp"
-#include "smInputVirtual.hpp"
+#include "smVirtualInput.hpp"
 
 //
 //class Actor : public sf::Drawable, public sf::Transformable {

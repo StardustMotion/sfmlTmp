@@ -19,6 +19,7 @@ class SpriteManager : public sf::Drawable {
 	std::uint8_t animId{ 0 }; // animation sequence index to play
 	float animDelta{ 0.f }; // frame at that time of the animation
 	float maxAnimationTime{ 1.f }; // how much time this animation takes
+	bool flipFlag{ false };
 
 	const std::vector<std::vector<float>> animations;
 public:
@@ -28,6 +29,7 @@ public:
 	void draw(sf::RenderTarget& canvas, sf::RenderStates states) const override;
 	void update(double deltaT, const sf::Vector2f& position);
 	void setAnimation(std::uint8_t val);
+	void flip();
 };
 
 //// orchestrates sprite display

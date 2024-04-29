@@ -4,19 +4,13 @@
 
 InputManager::InputManager(sf::RenderWindow& window):
     window(window),
-    inputs(),
-    keyboard{},
-    mouse{} {
+    inputs() {
     setupBindings();
 }
 
 InputManager::~InputManager() { ; }
 
-InputEvent::InputEvent(InputDevice device, uint8_t id, bool state):
-    device(device),
-    id(id),
-    state(state) {
-}
+
 
 /**
 * returns true if quitting the game
@@ -25,21 +19,28 @@ InputEvent::InputEvent(InputDevice device, uint8_t id, bool state):
 void InputManager::poll() {
     sf::Event event;
     std::uint8_t res{ 0 };
-    std::vector<InputEvent> inputEvents; 
+       
+    // switch any pressed key into a held status
+    if (presses.any())
+        for (std::size_t i{ 0 }; i < VInput::SIZE; ++i)
+            if (presses.test(i)) {
+                presses.reset(i);
+                inputs.event(static_cast<VInput>(i), true);
+            }
     while (window.pollEvent(event)) {
         if (event.type == sf::Event::EventType::KeyPressed) {
             if (event.key.code != sf::Keyboard::Key::Unknown) {
-                inputEvents.emplace_back(InputEvent::KEYBOARD, event.key.code, true);
+                processInput(event.key.code, true);
             }
         } else if (event.type == sf::Event::EventType::KeyReleased) {
             if (event.key.code != sf::Keyboard::Key::Unknown) {
-                inputEvents.emplace_back(InputEvent::KEYBOARD, event.key.code, false);
+                processInput(event.key.code, false);
             }
-        } else if (event.type == sf::Event::EventType::MouseButtonPressed) {
-            inputEvents.emplace_back(InputEvent::MOUSE, event.mouseButton.button, true);
+        } /*else if (event.type == sf::Event::EventType::MouseButtonPressed) {
+            inputEvents.emplace_back(InputEvent::MOUSE, static_cast<uint8_t>(event.mouseButton.button), true);
         } else if (event.type == sf::Event::EventType::MouseButtonReleased) {
-            inputEvents.emplace_back(InputEvent::MOUSE, event.mouseButton.button, false);
-        } else if (event.type == sf::Event::LostFocus) {
+            inputEvents.emplace_back(InputEvent::MOUSE, static_cast<uint8_t>(event.mouseButton.button), false);
+        }*/ else if (event.type == sf::Event::LostFocus) {
             Logger::debug("Lost window focus");
             isFocus = false;
         } else if (event.type == sf::Event::GainedFocus) {
@@ -48,28 +49,23 @@ void InputManager::poll() {
         } else if (event.type == sf::Event::Closed) {
             window.close();
         };
-
-    }
-
-    for (const auto& [device, id, state] : inputEvents) {
-        if (device == InputEvent::KEYBOARD) {
-            auto it = std::find(bindings.begin(), bindings.end(), id);
-            if (it != std::end(bindings)) {
-                std::size_t index = std::distance(bindings.begin(), it);
-                inputs.event(static_cast<InputVirtual::Event>(index), state);
-                Logger::debug(std::string(state ? "-->" : "<--") + " Key " + 
-                    std::to_string(id) + " (" + std::string(InputVirtual::descriptions[index]) + ")");
-
-            }
-        } else { // MOUSE
-           // ...
-        }
     }
 };
 
+// Keyboard only for now
+void InputManager::processInput(sf::Keyboard::Key key, bool state) {
+    auto it = std::find(keyboardBindings.begin(), keyboardBindings.end(), key);
+    if (it != std::end(keyboardBindings)) {
+        VInput vinput = static_cast<VInput>(std::distance(keyboardBindings.begin(), it));
+        if (state && !(inputs.isHeld(vinput)))
+            presses.set(vinput);
+        inputs.event(vinput,state);
+    }
+}
+
 void InputManager::setupBindings() {
-    for (int i = 0; i < static_cast<size_t>(InputVirtual::SIZE); i++) {
-        bindings[i] = InputVirtual::preBindings[i];
-        Logger::info("Bound " + std::to_string(bindings[i]) + " to " + std::string(InputVirtual::descriptions[i]));
+    for (int i = 0; i < VInput::SIZE; i++) {
+        keyboardBindings[i] = VirtualInput::preBindings[i];
+        Logger::info("Bound " + std::to_string(keyboardBindings[i]) + " to " + std::string(VirtualInput::descriptions[i]));
     }
 }

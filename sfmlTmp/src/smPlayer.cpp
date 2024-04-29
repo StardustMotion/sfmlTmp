@@ -1,6 +1,6 @@
 #include "smPlayer.hpp"
 
-Player::Player(const InputVirtual& inputs, const ImageManager& img):
+Player::Player(const VirtualInput& inputs, const ImageManager& img):
 	inputs(inputs),
 	img(img),
 	sprite(img) {
@@ -9,22 +9,24 @@ Player::~Player() { ; }
 
 void Player::update(double deltaT) {
 	sf::Vector2f pos = this->getPosition();
-	if (inputs.check(InputVirtual::LEFT)) {
+	if (inputs.isHeld(VInput::LEFT)) {
 		pos.x -= 2.f;
 		sprite.setAnimation(PlayerAnimation::FIRE);
 	}
-	else if (inputs.check(InputVirtual::RIGHT)) {
+	if (inputs.isHeld(VInput::RIGHT)) {
 		pos.x += 2.f;
 		sprite.setAnimation(PlayerAnimation::FIRE);
 	}
-	if (inputs.check(InputVirtual::UP)) {
+	if (inputs.isHeld(VInput::UP)) {
 		pos.y -= 2.f;
 		sprite.setAnimation(PlayerAnimation::JUMP);
-
 	}
-	else if (inputs.check(InputVirtual::DOWN)) {
+	if (inputs.isHeld(VInput::DOWN)) {
 		pos.y += 2.f;
 		sprite.setAnimation(PlayerAnimation::STAND);
+	}
+	if (inputs.isPressed(VInput::A)) {
+		sprite.flip();
 	}
 
 	this->setPosition(pos);

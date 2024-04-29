@@ -4,9 +4,8 @@
 SpriteManager::SpriteManager(const ImageManager& img):
 	animations({ {0.2f,0.15f,1.5f}, {0.2f,0.12f,0.2f,0.12f}, {0.15f,0.1f,1.f} }) {
 	sprite.setTexture(*img.get(image::Files::WILYWARS_CRASHMAN));
-	sprite.setScale(3.f, 3.f);
-	
-	//sprite.setTextureRect({ 0,0,32,32, });
+	sprite.setScale(4.f, 4.f);
+	sprite.setOrigin({ 16.f,16.f });
 }
 SpriteManager::~SpriteManager() { ; }
 
@@ -26,6 +25,11 @@ void SpriteManager::update(double deltaT, const sf::Vector2f& position) {
 		animDelta = std::fmod(animDelta, maxAnimationTime);
 		index--;
 	}
+	sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height);
+	if (flipFlag) {
+		flipFlag = false;
+		sprite.setScale(sprite.getScale().x * -1.f, sprite.getScale().y);
+	}
 	sprite.setTextureRect({ 32 * index,32 * animId,32,32 });
 }
 
@@ -35,6 +39,10 @@ void SpriteManager::setAnimation(std::uint8_t val) {
 	for (float i : animations[animId]) {
 		maxAnimationTime += i;
 	}
+}
+
+void SpriteManager::flip() {
+	this->flipFlag = true;
 }
 
 void SpriteManager::draw(sf::RenderTarget& canvas, sf::RenderStates states) const {

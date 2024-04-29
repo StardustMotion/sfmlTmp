@@ -1,6 +1,6 @@
 #include "smGame.hpp"
 #include <SFML/Window/Event.hpp>
-#include "smInputVirtual.hpp"
+#include "smVirtualInput.hpp"
 
 Game::Game(Window& window):
 	win(window.win),

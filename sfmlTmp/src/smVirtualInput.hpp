@@ -3,20 +3,26 @@
 #include <SFML/Window.hpp>
 #include "smLogger.hpp"
 
+
+enum VInput : uint8_t {
+	//UNKNOWN,
+	UP, DOWN, LEFT, RIGHT, 
+	A, B, C, START,
+	SIZE
+};
+
 /**
 * @brief 1P megadrive controller for now
 */
-struct InputVirtual {
-	enum Event : unsigned char {
-		//UNKNOWN,
-		UP, DOWN, LEFT, RIGHT,
-		A, B, C,
-		START,
-		SIZE
+class VirtualInput {
+public:
+	enum State : uint8_t {
+		RELEASED = 0,
+		PRESSED,
+		HELD
 	};
-	std::array<bool, Event::SIZE> state{};
-
-	static constexpr std::array<std::string_view, SIZE> descriptions{ // pair<Event,string>
+	std::array<State, VInput::SIZE> virtualInputState{};
+	static constexpr std::array<std::string_view, SIZE> descriptions{
 		//"???",
 		"[UP] Move up", "[DOWN] Move down", "[LEFT] Move left", "[RIGHT] Move right",
 		"[A] Select", "[B] Alternative", "[C] Cancel",
@@ -31,14 +37,8 @@ struct InputVirtual {
 		sf::Keyboard::Key::Enter
 	};
 
-	void print() const {
-		Logger::info("State " + state[0] + state[1] + state[2] + state[3] + state[4] + state[5] + state[6] + state[7]);
-	}
-	bool check(const Event event) const { 
-		return state[event]; 
-	}
-	void event(const Event event, bool status) { 
-		state[event] = status; 
-	};
+	bool isPressed(VInput type) const; // only the press frame
+	bool isHeld(VInput type) const; // held frames OR press frame
+	void event(VInput type, bool state);
 };
 

@@ -1,7 +1,7 @@
 #include "smSonicScene.hpp"
 
 
-SonicScene::SonicScene(const sf::Vector2f& win, const ImageManager& img, const InputVirtual& inputs, AudioManager& audio)
+SonicScene::SonicScene(const sf::Vector2f& win, const ImageManager& img, const VirtualInput& inputs, AudioManager& audio)
 	: img{ img }
 	, inputs{ inputs }
 	, audio{ audio }
@@ -43,9 +43,5 @@ void SonicScene::onUpdate(double deltaT) {
 }
 
 void SonicScene::moveView(float x, float y) {
-	if (inputs.check(InputVirtual::A)) {
-		x *= 3;
-		y *= 3;
-	}
 	camera += {x, y};
 }
