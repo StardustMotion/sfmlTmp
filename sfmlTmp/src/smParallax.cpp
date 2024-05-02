@@ -1,13 +1,14 @@
 #include "smParallax.hpp"
 
-Parallax::Parallax(const sf::Vector2f& win, const ImageManager& img, const Parallaxes::Parallax id)
+Parallax::Parallax(const sf::Vector2f& win, const TextureManager& img, const std::string_view file)
 	: win(win)
-	, speed(Parallaxes::entries[id].first.speed) {
+	//, speed(Parallaxes::entries[id].first.speed) 
+{
 	assert((speed >= 0 && speed <= 1.f) && "parallax speed must be within [0.f, 1.f]");
-	bg.setTexture(*img.get(Parallaxes::entries[id].second));
-	Parallaxes::ParallaxEntry entry = Parallaxes::entries[id].first;
-	bg.setTextureRect({ entry.left, entry.top, entry.width, entry.height });
-	bg.setScale({ (win.x / entry.width) * entry.xScale, (win.y / entry.width) * entry.yScale });
+	//bg.setTexture(*img.get(Parallaxes::entries[id].second));
+	//Parallaxes::ParallaxEntry entry = Parallaxes::entries[id].first;
+	//bg.setTextureRect({ entry.left, entry.top, entry.width, entry.height });
+	//bg.setScale({ (win.x / entry.width) * entry.xScale, (win.y / entry.width) * entry.yScale });
 	bgSize = { bg.getScale().x * bg.getTextureRect().getSize().x, bg.getScale().y * bg.getTextureRect().getSize().y };
 }
 Parallax::~Parallax() { ; }

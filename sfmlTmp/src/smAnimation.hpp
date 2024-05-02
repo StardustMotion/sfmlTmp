@@ -1,25 +1,13 @@
 #pragma once
 #include <vector>
-#include <SFML/Graphics/Rect.hpp>
+#include <SFML/Graphics.hpp>
 
-struct Frame {
-	const sf::IntRect crop;
+struct AnimationFrame {
+	float t;
+	sf::Vector2i crop;
 };
 
-enum AnimType : std::size_t {
-	IDLE,
-	Ooof,
-	ERF
+struct Animation {
+	sf::Vector2i size; // all frames have same height/width
+	std::vector<std::vector<AnimationFrame>> frames; // [x][y] = animation x frame y
 };
-
-// Wraps a sequence of frames into an actual sequence
-class Animation
-{
-	AnimType type; // identifier/pattern
-	std::vector<std::pair<float, Frame>> frames; // [duration, frame] (0 = inf. duration)
-public:
-	Animation(AnimType type, std::vector<std::pair<float,Frame>>&& frames);
-	~Animation();
-	const std::vector<std::pair<float, Frame>>& getFrames() const;
-};
-

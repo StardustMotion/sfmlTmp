@@ -144,13 +144,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\smVirtualInput.cpp" />
-    <ClCompile Include="src\smPlayer.cpp" />
-    <ClCompile Include="src\smSpriteManager.cpp" />
-    <ClCompile Include="src\smAnimation.cpp" />
     <ClCompile Include="src\smActor.cpp" />
     <ClCompile Include="src\smParallax.cpp" />
     <ClCompile Include="src\smSonicScene.cpp" />
-    <ClCompile Include="src\smImageManager.cpp" />
+    <ClCompile Include="src\smTextureManager.cpp" />
     <ClCompile Include="src\smWindow.cpp" />
     <ClCompile Include="src\smAudioManager.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -159,14 +156,12 @@
     <ClCompile Include="src\smLogger.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\smPlayer.hpp" />
-    <ClInclude Include="src\smSpriteManager.hpp" />
-    <ClInclude Include="src\smAnimation.hpp" />
     <ClInclude Include="src\smActor.hpp" />
+    <ClInclude Include="src\smAnimation.hpp" />
     <ClInclude Include="src\smParallax.hpp" />
     <ClInclude Include="src\smRandom.hpp" />
     <ClInclude Include="src\smSonicScene.hpp" />
-    <ClInclude Include="src\smImageManager.hpp" />
+    <ClInclude Include="src\smTextureManager.hpp" />
     <ClInclude Include="src\smVirtualInput.hpp" />
     <ClInclude Include="src\smWindow.hpp" />
     <ClInclude Include="src\smAudioManager.hpp" />

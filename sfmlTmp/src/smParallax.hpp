@@ -4,7 +4,7 @@
 #include <cassert>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/RenderTexture.hpp>
-#include "smImageManager.hpp"
+#include "smTextureManager.hpp"
 #include "smLogger.hpp"
 
 
@@ -23,12 +23,12 @@ namespace Parallaxes {
 		PARALLAX_SIZE
 	};
 
-	constexpr std::array<std::pair<ParallaxEntry, image::Files>, PARALLAX_SIZE> entries{ {
+	/*constexpr std::array<std::pair<ParallaxEntry, image::Files>, PARALLAX_SIZE> entries{{
 		{ { 0,	0,	256,256,	1.f,1.f,	1.f }, image::Files::WILYWARS_PARALLAX },
 		{ { 256,0,	256,256,	1.f,1.f,	0.25f }, image::Files::WILYWARS_PARALLAX },
 		{ { 0,	256,256,256,	1.f,1.f,	0.5f }, image::Files::WILYWARS_PARALLAX },
 		{ { 256,256,256,256,	1.f,1.f,	1.0f }, image::Files::WILYWARS_PARALLAX }
-	} };
+	} };*/
 }
 
 // non-interactive plan to fill canvas with
@@ -39,7 +39,7 @@ class Parallax
 	const sf::Vector2f& win;
 	float speed{ 1.f };
 public:
-	Parallax(const sf::Vector2f& win, const ImageManager& img, const Parallaxes::Parallax imgId);
+	Parallax(const sf::Vector2f& win, const TextureManager& img, const std::string_view file);
 	~Parallax();
 
 	/**

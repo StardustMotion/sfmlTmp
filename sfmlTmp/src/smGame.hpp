@@ -8,7 +8,7 @@
 #include "smResources.hpp"
 #include "smWindow.hpp"
 #include "smInputManager.hpp"
-#include "smImageManager.hpp"
+#include "smTextureManager.hpp"
 #include "smSonicScene.hpp"
 
 class Game final
@@ -19,7 +19,7 @@ private:
 	std::unique_ptr<sf::RenderTexture> canvas;
 	AudioManager audio;
 	InputManager inputManager; // "inputs" for virtual inputs
-	ImageManager img;
+	TextureManager img;
 	SonicScene scene;
 
 public:

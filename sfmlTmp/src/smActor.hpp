@@ -1,32 +1,37 @@
 #pragma once
-#include <SFML/System.hpp>
-#include <SFML/Graphics/Sprite.hpp>
-#include <SFML/Graphics/RenderTexture.hpp>
-#include "smImageManager.hpp"
-#include "smSpriteManager.hpp"
+#include <SFML/Graphics.hpp>
 #include "smVirtualInput.hpp"
+#include "smTextureManager.hpp"
+#include "smAnimation.hpp"
 
-//
-//class Actor : public sf::Drawable, public sf::Transformable {
-//
-//public:
-//	void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
-//};
-//
-//Actor::Actor() {
-//	//this->setpo
-//}
+// game logic atom ("object"); alternative names "entity" / "unit"
+//  "Actor" comes from Doom modding
 
+// For some other mass producted object like particles or map tile we will use another class than actor
 
-//// game logic atom ("object"); alternative names "entity" / "unit"
-////  "Actor" comes from Doom modding
-//class Actor : public sf::Drawable, public sf::Transformable
-//{
-//	SpriteManager spriteManager;
-//public:
-//	Actor(const ImageManager& img, image::Files file);
-//	~Actor();
-//	void update(double deltaT, const InputVirtual& inputs);
-//	void draw(sf::RenderTarget& target, sf::RenderStates states) const final;
-//};
+class Actor : public sf::Transformable, public sf::Drawable {
+	sf::Sprite sprite;
+	Animation* anim{ nullptr };
+	std::uint8_t animSequence{ 0 };
+	float animDelta{ 0.f }; // frame at that time of the animation
+	float animMaxTime{ 0.f }; // how much time this animation takes
+	bool flipFlag{ false };
 
+public:
+	Actor(std::string&& texture);
+	~Actor();
+	void draw(sf::RenderTarget& canvas, sf::RenderStates states) const override;
+	void flip();
+	void update(double deltaT);
+	void setAnimSequence(std::uint8_t val, bool loop = true);
+};
+
+class ActorCrashman : public Actor {
+public:
+	ActorCrashman();
+};
+
+class ActorMetalman : public Actor {
+public:
+	ActorMetalman();
+};
