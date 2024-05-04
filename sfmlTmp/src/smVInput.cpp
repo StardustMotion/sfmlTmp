@@ -1,14 +1,17 @@
 #pragma once
-#include "smVirtualInput.hpp"
+#include "smVInput.hpp"
 
-bool VirtualInput::isPressed(VInput type) const {
-	return this->virtualInputState[type] == State::PRESSED;
+
+std::array<VInput::State, VInput::VInputType::SIZE> VInput::virtualInputState{};
+
+bool VInput::isPressed(VInputType type) {
+	return virtualInputState[type] == State::PRESSED;
 }
-bool VirtualInput::isHeld(VInput type) const {
-	return this->virtualInputState[type] != State::RELEASED;
+bool VInput::isHeld(VInputType type) {
+	return virtualInputState[type] != State::RELEASED;
 }
 
-void VirtualInput::event(VInput type, bool state) {
+void VInput::event(VInputType type, bool state) {
 	if (state)
 		if (virtualInputState[type] == State::PRESSED) {
 			virtualInputState[type] = State::HELD;
@@ -19,5 +22,5 @@ void VirtualInput::event(VInput type, bool state) {
 	else
 		virtualInputState[type] = State::RELEASED;
 	Logger::debug(std::string((virtualInputState[type] != State::RELEASED) ? "--> " : "<-- ") 
-					+ std::string(VirtualInput::descriptions[type]));
+					+ std::string(VInput::descriptions[type]));
 }

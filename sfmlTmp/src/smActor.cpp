@@ -3,11 +3,11 @@
 
 
 Actor::Actor(std::string&& texture) {
-	sf::Texture* tex = TextureManager::getTexture(".\\res\\texture\\actor\\" + texture).get();
+	sf::Texture* tex = img().getTexture(".\\res\\texture\\actor\\" + texture).get();
 	if (tex) {
 		this->sprite.setTexture(*tex);
 		this->sprite.setScale(4.f, 4.f);
-		this->anim = TextureManager::getAnim(texture);
+		this->anim = img().getAnim(texture);
 		if (!this->anim)
 			Logger::warn("Could not load animation <" + texture + "> for Actor");
 		else {
@@ -35,7 +35,11 @@ void Actor::flip() {
 }
 
 void Actor::update(double deltaT) {
+	move(0, 1.f);
 	sprite.setPosition(this->getPosition());
+	if (VInput::isPressed(VInput::A)) {
+		flipFlag = true;
+	}
 	if (flipFlag) {
 		flipFlag = false;
 		sprite.setScale(sprite.getScale().x * -1.f, sprite.getScale().y);

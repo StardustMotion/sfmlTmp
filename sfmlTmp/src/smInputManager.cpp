@@ -4,7 +4,7 @@
 
 InputManager::InputManager(sf::RenderWindow& window):
     window(window),
-    inputs() {
+    vInputs() {
     setupBindings();
 }
 
@@ -25,7 +25,7 @@ void InputManager::poll() {
         for (std::size_t i{ 0 }; i < VInput::SIZE; ++i)
             if (presses.test(i)) {
                 presses.reset(i);
-                inputs.event(static_cast<VInput>(i), true);
+                vInputs.event(static_cast<VInput::VInputType>(i), true);
             }
     while (window.pollEvent(event)) {
         if (event.type == sf::Event::EventType::KeyPressed) {
@@ -56,16 +56,16 @@ void InputManager::poll() {
 void InputManager::processInput(sf::Keyboard::Key key, bool state) {
     auto it = std::find(keyboardBindings.begin(), keyboardBindings.end(), key);
     if (it != std::end(keyboardBindings)) {
-        VInput vinput = static_cast<VInput>(std::distance(keyboardBindings.begin(), it));
-        if (state && !(inputs.isHeld(vinput)))
+        VInput::VInputType vinput = static_cast<VInput::VInputType>(std::distance(keyboardBindings.begin(), it));
+        if (state && !(vInputs.isHeld(vinput)))
             presses.set(vinput);
-        inputs.event(vinput,state);
+        vInputs.event(vinput,state);
     }
 }
 
 void InputManager::setupBindings() {
     for (int i = 0; i < VInput::SIZE; i++) {
-        keyboardBindings[i] = VirtualInput::preBindings[i];
-        Logger::info("Bound " + std::to_string(keyboardBindings[i]) + " to " + std::string(VirtualInput::descriptions[i]));
+        keyboardBindings[i] = VInput::preBindings[i];
+        Logger::info("Bound " + std::to_string(keyboardBindings[i]) + " to " + std::string(VInput::descriptions[i]));
     }
 }

@@ -1,21 +1,22 @@
 #include "smGame.hpp"
 #include <SFML/Window/Event.hpp>
-#include "smVirtualInput.hpp"
+#include "smVInput.hpp"
 
-Game::Game(Window& window):
-	win(window.win),
-	renderWindow{ *window.renderWindow },
-	canvas{ std::make_unique<sf::RenderTexture>() },
-	audio{},
-	inputManager{ *window.renderWindow },
-	img{},
-	scene{ win, img, inputManager.inputs, audio } {
+Game::Game(sf::RenderWindow& window)
+	: window(window)
+	, audioManager()
+	, textureManager()
+	, inputManager{ window }
+	, scene{} {
 
-	sf::Vector2f windowSize{ window.renderWindow->getSize() };
-	canvas->create(windowSize.x, windowSize.y);
+	ResourceHandler::audioManager = &audioManager;
+	ResourceHandler::textureManager = &textureManager;
+	VInputHandler::vInputs = &inputManager.vInputs;
+
+	canvas.create(window.getSize().x, window.getSize().y);
 
 	// init view to center=(0,0)
-	canvas->setView({ sf::Vector2f(0,0), std::move(windowSize) });
+	canvas.setView({ sf::Vector2f(0,0), { static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y)} });
 
 	run();
 }
@@ -31,7 +32,7 @@ void Game::run() {
 
 	uint64_t frameCount{};
 
-	while (renderWindow.isOpen()) {
+	while (window.isOpen()) {
 		inputManager.poll(); // gameloop tic/sleep() + input check
 		frameCount++;
 		this->update(deltaT); // game logic
@@ -49,16 +50,16 @@ void Game::update(double deltaT) {
 }
 
 void Game::render() {
-	renderWindow.clear();
-	canvas->clear();
-	scene.onDraw(*canvas); // lend blank canvas to the scene to fill on
-	canvas->display();
+	window.clear();
+	canvas.clear();
+	scene.onDraw(canvas); // lend blank canvas to the scene to fill on
+	canvas.display();
 
 	// transfer canvas to final window
-	sf::Sprite frame{ canvas->getTexture() };
+	sf::Sprite frame{ canvas.getTexture() };
 
 	// <post-screen processing/shading todo here>
 
-	renderWindow.draw(frame);
-	renderWindow.display();
+	window.draw(frame);
+	window.display();
 }

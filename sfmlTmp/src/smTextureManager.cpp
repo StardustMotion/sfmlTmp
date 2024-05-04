@@ -2,9 +2,6 @@
 #include "smLogger.hpp"
 #include "smTextureManager.hpp"
 
-std::map<std::string, Animation> TextureManager::animations{};
-std::map<std::string, std::shared_ptr<sf::Texture>> TextureManager::cache{};
-
 // todo "paths db" file?
 
 // maybe later defer texture loading (i.e on new scene load)

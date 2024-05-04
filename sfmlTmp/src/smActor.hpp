@@ -1,15 +1,19 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "smVirtualInput.hpp"
-#include "smTextureManager.hpp"
+#include "smVInput.hpp"
 #include "smAnimation.hpp"
+#include "smResourceHandler.hpp"
 
 // game logic atom ("object"); alternative names "entity" / "unit"
 //  "Actor" comes from Doom modding
 
 // For some other mass producted object like particles or map tile we will use another class than actor
 
-class Actor : public sf::Transformable, public sf::Drawable {
+class Actor : 
+	public sf::Transformable, 
+	public sf::Drawable, 
+	public ResourceHandler {
+
 	sf::Sprite sprite;
 	Animation* anim{ nullptr };
 	std::uint8_t animSequence{ 0 };

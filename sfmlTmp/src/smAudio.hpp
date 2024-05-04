@@ -3,7 +3,7 @@
 #include <array>
 
 namespace audio {
-	constexpr std::string_view root = "res/audio/";
+	constexpr std::string_view root = ".\\res\\audio\\";
 	enum class BGM {
 		MAIN,
 		MAIN2,

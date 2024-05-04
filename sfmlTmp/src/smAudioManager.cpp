@@ -1,9 +1,6 @@
 #include "smAudioManager.hpp"
-#include <string>
-#include <string_view>
 
-AudioManager::AudioManager():
-	isEnabled(true) {
+AudioManager::AudioManager() {
 	for (std::size_t i{ 0 }; i < static_cast<std::size_t>(audio::SFX::SFX_SIZE); ++i) {
 		buffers[i] = sf::SoundBuffer(); // new
 		std::string filePath = std::string(audio::root) + std::string(audio::sfx[i]);
@@ -25,13 +22,13 @@ void AudioManager::music(audio::BGM const bgm) {
 	stream.setPitch(1.0f);
 }
 void AudioManager::noMusic() {
-	if (!isEnabled) 
+	if (!isEnabled)
 		return;
 	Logger::info("Stopping BGM");
 	stream.stop();
 }
 void AudioManager::sound(audio::SFX const sfx) {
-	if (!isEnabled) 
+	if (!isEnabled)
 		return;
 	sfSound.setBuffer(buffers[static_cast<std::size_t>(sfx)]);
 	sfSound.play();

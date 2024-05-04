@@ -4,24 +4,25 @@
 #include "smLogger.hpp"
 
 
-enum VInput : uint8_t {
-	//UNKNOWN,
-	UP, DOWN, LEFT, RIGHT, 
-	A, B, C, START,
-	SIZE
-};
 
 /**
+* VInput (virtual input)
 * @brief 1P megadrive controller for now
 */
-class VirtualInput {
+class VInput {
 public:
+	enum VInputType : uint8_t {
+		//UNKNOWN,
+		UP, DOWN, LEFT, RIGHT,
+		A, B, C, START,
+		SIZE
+	};
 	enum State : uint8_t {
 		RELEASED = 0,
 		PRESSED,
 		HELD
 	};
-	std::array<State, VInput::SIZE> virtualInputState{};
+	static std::array<State, VInputType::SIZE> virtualInputState;
 	static constexpr std::array<std::string_view, SIZE> descriptions{
 		//"???",
 		"[UP] Move up", "[DOWN] Move down", "[LEFT] Move left", "[RIGHT] Move right",
@@ -37,8 +38,8 @@ public:
 		sf::Keyboard::Key::Enter
 	};
 
-	bool isPressed(VInput type) const; // only the press frame
-	bool isHeld(VInput type) const; // held frames OR press frame
-	void event(VInput type, bool state);
+	static bool isPressed(VInputType type); // only the press frame
+	static bool isHeld(VInputType type); // held frames OR press frame
+	void event(VInputType type, bool state);
 };
 
