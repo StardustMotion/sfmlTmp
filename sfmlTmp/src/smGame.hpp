@@ -19,8 +19,6 @@ private:
 	AudioManager audioManager;
 	InputManager inputManager;
 
-	SonicScene scene;
-
 public:
 	Game(sf::RenderWindow& window);
 	~Game();
@@ -30,10 +28,10 @@ public:
 	/**
 	* @brief proceed next tic of game state/logic
 	**/
-	void update(double deltaT);
+	void update(double deltaT, SonicScene& scene);
 
 	/**
 	* @brief transfer a lent a blank canvas to the scene to draw everything on into final window
 	**/
-	void render();
+	void render(SonicScene& scene);
 };

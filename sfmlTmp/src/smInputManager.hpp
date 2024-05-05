@@ -32,4 +32,6 @@ public:
 	void poll();
 	void setupBindings();
 	void processInput(sf::Keyboard::Key key, bool state);
+	void processInput(sf::Event::MouseButtonEvent event, bool state);
+
 };

@@ -18,7 +18,6 @@ InputManager::~InputManager() { ; }
 */
 void InputManager::poll() {
     sf::Event event;
-    std::uint8_t res{ 0 };
        
     // switch any pressed key into a held status
     if (presses.any())
@@ -36,11 +35,13 @@ void InputManager::poll() {
             if (event.key.code != sf::Keyboard::Key::Unknown) {
                 processInput(event.key.code, false);
             }
-        } /*else if (event.type == sf::Event::EventType::MouseButtonPressed) {
-            inputEvents.emplace_back(InputEvent::MOUSE, static_cast<uint8_t>(event.mouseButton.button), true);
+        } else if (event.type == sf::Event::EventType::MouseButtonPressed) {
+            processInput(event.mouseButton, true);
         } else if (event.type == sf::Event::EventType::MouseButtonReleased) {
-            inputEvents.emplace_back(InputEvent::MOUSE, static_cast<uint8_t>(event.mouseButton.button), false);
-        }*/ else if (event.type == sf::Event::LostFocus) {
+            processInput(event.mouseButton, false);
+        }
+        
+        else if (event.type == sf::Event::LostFocus) {
             Logger::debug("Lost window focus");
             isFocus = false;
         } else if (event.type == sf::Event::GainedFocus) {
@@ -52,7 +53,6 @@ void InputManager::poll() {
     }
 };
 
-// Keyboard only for now
 void InputManager::processInput(sf::Keyboard::Key key, bool state) {
     auto it = std::find(keyboardBindings.begin(), keyboardBindings.end(), key);
     if (it != std::end(keyboardBindings)) {
@@ -61,6 +61,13 @@ void InputManager::processInput(sf::Keyboard::Key key, bool state) {
             presses.set(vinput);
         vInputs.event(vinput,state);
     }
+}
+
+void InputManager::processInput(sf::Event::MouseButtonEvent event, bool state) {
+    VInput::VInputType type = (event.button == sf::Mouse::Left) ? VInput::VInputType::A : VInput::VInputType::B;
+    if (state && !(vInputs.isHeld(type)))
+        presses.set(type);
+    vInputs.event(type, { event.x, event.y }, state);
 }
 
 void InputManager::setupBindings() {

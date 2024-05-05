@@ -6,9 +6,9 @@ Game::Game(sf::RenderWindow& window)
 	: window(window)
 	, audioManager()
 	, textureManager()
-	, inputManager{ window }
-	, scene{} {
+	, inputManager{ window } {
 
+	// add a hook for game elements to reach those
 	ResourceHandler::audioManager = &audioManager;
 	ResourceHandler::textureManager = &textureManager;
 	VInputHandler::vInputs = &inputManager.vInputs;
@@ -18,12 +18,14 @@ Game::Game(sf::RenderWindow& window)
 	// init view to center=(0,0)
 	canvas.setView({ sf::Vector2f(0,0), { static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y)} });
 
+
 	run();
 }
 Game::~Game() { ; }
 
 // single threaded for now
 void Game::run() {
+	SonicScene scene;
 	double fps = 30.0;
 	double deltaT = 1.0 / fps;
 	Logger::info("\n===================\nStarting up (" + tos(fps) + " FPS)...\n================== = ");
@@ -35,8 +37,9 @@ void Game::run() {
 	while (window.isOpen()) {
 		inputManager.poll(); // gameloop tic/sleep() + input check
 		frameCount++;
-		this->update(deltaT); // game logic
-		this->render();
+		
+		this->update(deltaT, scene); // game logic
+		this->render(scene);
 
 	}
 	float finalTime = clock.getElapsedTime().asSeconds();
@@ -45,11 +48,11 @@ void Game::run() {
 		"\nFrames : " + tos(frameCount) + " (" + tos(frameCount/ finalTime) + ")");
 }
 
-void Game::update(double deltaT) {
-	scene.onUpdate(deltaT);
+void Game::update(double deltaT, SonicScene& scene) {
+	scene.onUpdate(deltaT, canvas.getView());
 }
 
-void Game::render() {
+void Game::render(SonicScene& scene) {
 	window.clear();
 	canvas.clear();
 	scene.onDraw(canvas); // lend blank canvas to the scene to fill on
