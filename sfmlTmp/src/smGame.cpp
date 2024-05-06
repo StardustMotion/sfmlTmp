@@ -4,6 +4,7 @@
 
 Game::Game(sf::RenderWindow& window)
 	: window(window)
+	, canvas()
 	, audioManager()
 	, textureManager()
 	, inputManager{ window } {
@@ -13,11 +14,14 @@ Game::Game(sf::RenderWindow& window)
 	ResourceHandler::textureManager = &textureManager;
 	VInputHandler::vInputs = &inputManager.vInputs;
 
+	sf::View view;
+	sf::Vector2f size = static_cast<sf::Vector2f>(window.getSize());
+	view.reset({
+		{ -size/2.f },
+		{ size }
+	});		
 	canvas.create(window.getSize().x, window.getSize().y);
-
-	// init view to center=(0,0)
-	canvas.setView({ sf::Vector2f(0,0), { static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y)} });
-
+	canvas.setView(view);
 
 	run();
 }
@@ -49,7 +53,7 @@ void Game::run() {
 }
 
 void Game::update(double deltaT, SonicScene& scene) {
-	scene.onUpdate(deltaT, canvas.getView());
+	scene.onUpdate(deltaT, canvas);
 }
 
 void Game::render(SonicScene& scene) {

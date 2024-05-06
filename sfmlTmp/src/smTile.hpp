@@ -2,6 +2,6 @@
 
 struct Tile 
 {
-	bool state{ 1 };
+	bool visible{ 0 };
 };
 

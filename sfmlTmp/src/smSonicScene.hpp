@@ -11,19 +11,17 @@
 class SonicScene : public VInputHandler, public ResourceHandler
 {
 	SonicMap map;
-	//std::vector<Parallax> backgrounds;
+	std::vector<Parallax> parallaxes;
 	std::vector<Actor> actors;
 
-	uint8_t camSpeed{ 8 };
+	float camSpeed{ 4.f };
 	sf::Vector2f offset{ 0.f,0.f };
 	sf::Font font;
-
-
 
 public:
 	SonicScene();
 	~SonicScene();
-	void onUpdate(double deltaT, const sf::View& view);
+	void onUpdate(double deltaT, sf::RenderTexture& canvas);
 	void onDraw(sf::RenderTexture& canvas);
 };
 

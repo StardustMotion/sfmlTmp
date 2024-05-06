@@ -10,8 +10,8 @@ SonicMap::SonicMap() {
 }
 
 // == getTile[x][y] (tile at row x, column y)
-Tile* SonicMap::getTile(std::size_t tmpRow, std::size_t tmpCol) {
-	std::size_t index = (col * tmpRow) + tmpCol;
+Tile* SonicMap::getTile(std::int32_t tmpRow, std::int32_t tmpCol) {
+	std::int32_t index = (col * tmpRow) + tmpCol;
 	assert((index < (row * col)) && "Tried to get tile with index out of range");
 	return &map[index];
 }
@@ -41,12 +41,23 @@ void SonicMap::draw(sf::RenderTexture& canvas) {
 	for (int tmpRow{ sides.x }; tmpRow < 1 + sides.x + static_cast<int>((view.getSize().y / tileSize)); ++tmpRow) {
 
 		for (int tmpCol{ sides.y }; tmpCol < 1 + sides.y + static_cast<int>((view.getSize().x / tileSize)); ++tmpCol) {
-			if (getTile(tmpRow, tmpCol)->state) {
+			if (getTile(tmpRow, tmpCol)->visible) {
 				tile.setPosition(toWorld(tmpRow, tmpCol));
 				canvas.draw(tile);
 			}
 		}
 	}
 
+
+}
+
+void SonicMap::toggleTile(const sf::View& view, const sf::Vector2i& position) {
+	sf::Vector2i indexes = toIndex({
+		view.getCenter().x - (view.getSize().x / 2.f) + position.x,
+		view.getCenter().y - (view.getSize().y / 2.f) + position.y
+		});
+	
+	getTile(indexes.x, indexes.y)->visible ^= 0x1;
+	
 
 }

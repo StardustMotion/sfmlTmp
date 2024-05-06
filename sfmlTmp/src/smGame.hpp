@@ -13,7 +13,7 @@ class Game final
 {
 private:
 	sf::RenderWindow& window;
-	sf::RenderTexture canvas{};
+	sf::RenderTexture canvas;
 
 	TextureManager textureManager;
 	AudioManager audioManager;
