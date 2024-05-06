@@ -29,7 +29,7 @@ Game::~Game() { ; }
 
 // single threaded for now
 void Game::run() {
-	SonicScene scene;
+	SonicScene scene(canvas.getView().getSize());
 	double fps = 30.0;
 	double deltaT = 1.0 / fps;
 	Logger::info("\n===================\nStarting up (" + tos(fps) + " FPS)...\n================== = ");

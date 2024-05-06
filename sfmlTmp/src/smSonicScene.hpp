@@ -14,12 +14,13 @@ class SonicScene : public VInputHandler, public ResourceHandler
 	std::vector<Parallax> parallaxes;
 	std::vector<Actor> actors;
 
-	float camSpeed{ 4.f };
 	sf::Vector2f offset{ 0.f,0.f };
+	sf::Vector2f mapLimits{ 2048.f, 1024.f }; // +/-
 	sf::Font font;
+	void camera(float x, float y);
 
 public:
-	SonicScene();
+	SonicScene(const sf::Vector2f& canvasSize);
 	~SonicScene();
 	void onUpdate(double deltaT, sf::RenderTexture& canvas);
 	void onDraw(sf::RenderTexture& canvas);

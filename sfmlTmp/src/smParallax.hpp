@@ -23,14 +23,14 @@ public:
 class Parallax_Heatman : public Parallax {
 public:
 	Parallax_Heatman() :
-		Parallax("wilywars_heat", 0.75f, 3.0f) {
+		Parallax("wilywars_heat", 0.125f, 2.f) {
 		;
 	}
 };
 class Parallax_Topman : public Parallax {
 public:
 	Parallax_Topman() :
-		Parallax("wilywars_top") {
+		Parallax("wilywars_top", 0.25f, 4.f) {
 		;
 	}
 };
