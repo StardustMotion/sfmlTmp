@@ -9,6 +9,7 @@
 #include "smResourceHandler.hpp"
 #include "smVInputHandler.hpp"
 
+// Note : SFML (and this game) is X,Y = 0,0 in TOP LEFT hand corner
 class Game final
 {
 private:
@@ -18,6 +19,7 @@ private:
 	TextureManager textureManager;
 	AudioManager audioManager;
 	InputManager inputManager;
+	sf::Font font;
 
 public:
 	Game(sf::RenderWindow& window);

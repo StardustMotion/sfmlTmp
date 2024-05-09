@@ -7,12 +7,18 @@ Game::Game(sf::RenderWindow& window)
 	, canvas()
 	, audioManager()
 	, textureManager()
-	, inputManager{ window } {
+	, inputManager{ window }
+	, font() {
 
 	// add a hook for game elements to reach those
 	ResourceHandler::audioManager = &audioManager;
 	ResourceHandler::textureManager = &textureManager;
 	VInputHandler::vInputs = &inputManager.vInputs;
+
+	if (!font.loadFromFile("res/font/sonic.ttf"))
+		Logger::warn("Couldn't load Sonic game font!!");
+
+	ResourceHandler::font = &font;
 
 	sf::View view;
 	sf::Vector2f size = static_cast<sf::Vector2f>(window.getSize());

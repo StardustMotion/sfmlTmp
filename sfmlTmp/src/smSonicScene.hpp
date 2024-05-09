@@ -16,7 +16,6 @@ class SonicScene : public VInputHandler, public ResourceHandler
 
 	sf::Vector2f offset{ 0.f,0.f };
 	sf::Vector2f mapLimits{ 2048.f, 1024.f }; // +/-
-	sf::Font font;
 	void camera(float x, float y);
 
 public:
@@ -24,5 +23,6 @@ public:
 	~SonicScene();
 	void onUpdate(double deltaT, sf::RenderTexture& canvas);
 	void onDraw(sf::RenderTexture& canvas);
+	void mapCollision(Actor& actor);
 };
 

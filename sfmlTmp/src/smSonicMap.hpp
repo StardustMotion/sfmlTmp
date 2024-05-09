@@ -6,27 +6,45 @@
 
 class SonicMap : public ResourceHandler
 {
-	int32_t row{ 32 }, col{ 64 };
+private:
 	std::vector<Tile> map;
-	sf::Sprite tileBase;
-	uint8_t tileSize{ 16 }; // tile size (on the tileset/in pixels)
-	float tileScale{ 4.f };
-	float tileWorldSize{ static_cast<float>(tileSize*tileScale) };
-	uint8_t tilesetColumns{ 4 };
+	sf::Vector2i mapSize;
+	int tileBaseSize;
+	float tileSize, halfTileSize;
+	int tilesetColumns{ 2 };
+	bool debug{ true };
+	sf::Sprite tileSprite;
 
-
-
-	Tile* getTile(std::int32_t tmpRow, std::int32_t tmpCol);
-	void setTile(std::int32_t tmpRow, std::int32_t tmpCol, const Tile&& tile);
-	sf::Vector2i toIndex(const sf::Vector2f pos);
-	sf::Vector2f toWorld(int tmpRow, int tmpCol) const;
+	// debug grid
+	sf::RectangleShape gridLine;
+	sf::Text coordinate;
 public:
-	// name of the map structure file (.tmj)
-	SonicMap(std::string&& name);
-	void draw(sf::RenderTexture& canvas);
-	void toggleTile(const sf::View& view, const sf::Vector2i& position);
-	
-	// Return the maximum view center x,y position (+/-) to not exceed
-	sf::Vector2f getMapLimits(const sf::Vector2f& canvasSize) const;
+	SonicMap();
+
+	void drawOn(sf::RenderTarget& canvas);
+
+	// Return { x (columns), y (rows) } vector of map size
+	const sf::Vector2i& getMapSize() const;
+
+	// Get tile's real world (after scaling) size (a.k.a length of one of its sides)
+	float getTileSize() const;
+
+	// Convert floating world position to tile grid position 
+	sf::Vector2i toIndex(const sf::Vector2f worldPosition) const;
+
+	// Convert tile grid position to floating world position
+	sf::Vector2f toWorld(sf::Vector2i indexPosition) const;
+
+	// Get x/y tile on the grid / toss runtime error if out of bounds
+	Tile* getTile(uint32_t x, uint32_t y);
+
+	// Set x/y tile on the grid / toss runtime error if out of bounds
+	void setTile(uint32_t x, uint32_t y, Tile&& newTile);
+
+	// Check if tile index is out of bounds
+	Tile* checkTileIndex(uint32_t x, uint32_t y);
+
+	// Debug displays map grid/coordinates
+	void toggleDebug();
 };
 

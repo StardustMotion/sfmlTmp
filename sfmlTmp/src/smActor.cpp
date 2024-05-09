@@ -4,21 +4,29 @@
 
 Actor::Actor(std::string&& texture) {
 	sf::Texture* tex = img().getTexture(".\\res\\texture\\actor\\" + texture).get();
+
 	if (tex) {
 		this->sprite.setTexture(*tex);
-		this->sprite.setScale(3.f, 3.f);
+		float scaledTo = 2.f;
+		this->sprite.setScale(scaledTo, scaledTo);
 		this->anim = img().getAnim(texture);
 		if (!this->anim)
 			Logger::warn("Could not load animation <" + texture + "> for Actor");
 		else {
-			this->sprite.setOrigin(	static_cast<float>(this->anim->size.x) / 2.f, 
-									static_cast<float>(this->anim->size.y) / 2.f);
 			setAnimSequence(0);
+			bbox = { scaledTo*static_cast<float>(this->anim->size.x), scaledTo*static_cast<float>(this->anim->size.y) };
+			this->sprite.setOrigin(bbox.x / 2.f / scaledTo, bbox.y / 2.f / scaledTo);
 		}
 	}
 	else {
 		Logger::warn("Could not load texture <" + texture + "> for Actor");
 	}
+
+	bboxSprite.setSize(bbox);
+	bboxSprite.setFillColor(sf::Color(255, 0, 0, 128));
+	bboxSprite.setOrigin(bbox.x / 2.f, bbox.y / 2.f);
+
+	this->setPosition(0, 0);
 }
 
 Actor::~Actor() { ; }
@@ -26,6 +34,27 @@ Actor::~Actor() { ; }
 
 void Actor::draw(sf::RenderTarget& canvas, sf::RenderStates states) const {
 	canvas.draw(sprite);
+	canvas.draw(bboxSprite);
+
+	sf::CircleShape dot;
+	dot.setRadius(4);
+	dot.setOutlineColor(sf::Color::Red);
+	dot.setOutlineThickness(2);
+	dot.setPosition(this->getPosition());
+	dot.setOrigin(dot.getRadius(), dot.getRadius());
+
+	canvas.draw(dot);
+
+	unsigned int fontSize = 12;
+
+	sf::Text poato;
+	poato.setCharacterSize(fontSize);
+	//poato.setFont(getGameFont());
+	poato.setString(tos((int)sprite.getPosition().x) + "," + tos((int)sprite.getPosition().y));
+	poato.setPosition(sprite.getPosition() + sprite.getOrigin());
+	poato.setOrigin(static_cast<float>(poato.getString().getSize() * fontSize / 2.f), 6);
+	poato.setFillColor(sf::Color::Yellow);
+	canvas.draw(poato);
 }
 
 
@@ -36,30 +65,10 @@ void Actor::flipSprite(bool side) {
 }
 
 void Actor::update(double deltaT) {
-	float tmpSpd{ 0.15f };
-	if (VInput::isPressed(VInput::C) && getPosition().y == 0.f) {
-		vel.y = 20.f;
-		setAnimSequence(EmerlState::JUMP, false);
-	}
-	else if (getPosition().y == 0.f) {
-		if (VInput::isHeld(VInput::LEFT)) {
-			vel.x -= tmpSpd;
-			setAnimSequence(EmerlState::RUN);
-			flipSprite(0);
-		}
-		else if (VInput::isHeld(VInput::RIGHT)) {
-			vel.x += tmpSpd;
-			setAnimSequence(EmerlState::RUN);
-			flipSprite(1);
-		}
-		else if (abs(vel.x) < 0.2f) {
-			setAnimSequence(EmerlState::STAND);
-			setAnimSequence(0);
-		}
-	}
-	else {
-		vel.y -= 1.f;
-	}
+	sprite.setPosition(this->getPosition());
+	bboxSprite.setPosition(this->getPosition());
+	
+	
 
 	if (anim) {
 		animDelta += static_cast<float>(deltaT);
@@ -79,10 +88,10 @@ void Actor::update(double deltaT) {
 		sprite.setTextureRect({ crop.x, crop.y, anim->size.x, anim->size.y });
 	}
 
-	// collision resolution
-	move(vel.x, (getPosition().y+vel.y) < 0 ? -(getPosition().y) : vel.y);
+}
 
-	sprite.setPosition(getPosition().x, -getPosition().y);
+void Actor::setAirbone(bool status) {
+	//this->airbone = status;
 }
 
 void Actor::setAnimSequence(std::uint8_t val, bool loop) {

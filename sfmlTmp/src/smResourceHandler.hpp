@@ -8,6 +8,7 @@ class ResourceHandler {
 
 	static inline AudioManager* audioManager{ nullptr };
 	static inline TextureManager* textureManager{ nullptr };
+	static inline sf::Font* font{ nullptr };
 public:
 	AudioManager& audio() {
 		assert(audioManager && "audioManager was nullptr!");
@@ -16,5 +17,9 @@ public:
 	TextureManager& img() {
 		assert(textureManager && "textureManager was nullptr!");
 		return *textureManager;
+	}
+	const sf::Font& getGameFont() {
+		assert(textureManager && "font was nullptr!");
+		return *font;
 	}
 };
