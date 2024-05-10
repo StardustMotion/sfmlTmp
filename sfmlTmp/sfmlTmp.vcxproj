@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\smPlayer.cpp" />
     <ClCompile Include="src\smSonicMap.cpp" />
     <ClCompile Include="src\smVInput.cpp" />
     <ClCompile Include="src\smActor.cpp" />
@@ -156,6 +157,7 @@
     <ClCompile Include="src\smLogger.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\smPlayer.hpp" />
     <ClInclude Include="src\smSonicMap.hpp" />
     <ClInclude Include="src\smTile.hpp" />
     <ClInclude Include="src\smVInputHandler.hpp" />

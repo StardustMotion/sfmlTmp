@@ -3,7 +3,8 @@
 
 SonicScene::SonicScene(const sf::Vector2f& canvasSize)
 	: map ()
-	, parallaxes{ Parallax_Heatman() } {
+	, parallaxes{ Parallax_Heatman() }
+	, player() {
 
 	// camera CENTER cant exceed those
 	mapLimits = {
@@ -11,7 +12,8 @@ SonicScene::SonicScene(const sf::Vector2f& canvasSize)
 		(((map.getMapSize().y * map.getTileSize()) - canvasSize.y) / 2.f) - 1.f,
 	};
 
-	actors.emplace_back(ActorEmerl());
+	//actors.emplace_back(ActorEmerl());
+
 
 }
 SonicScene::~SonicScene() { ; }
@@ -20,85 +22,150 @@ SonicScene::~SonicScene() { ; }
 
 void SonicScene::onUpdate(double deltaT, sf::RenderTexture& canvas) {
 
-	float camSpeed = (input().isHeld(VInput::VInputType::C)) ? 72.f : 24.f;
-
-	/////////////////////// View alteration
-	sf::View view{ canvas.getView() };
-
-	view.setCenter(actors.back().getPosition());
-
-	sf::Vector2f pos = actors.back().getPosition();
-	view.setCenter(pos.x, pos.y);
-
-	// prevents camera from exceeding map limits
-	////////////////////////////////////
-	if (std::abs(view.getCenter().x) > mapLimits.x)
-		view.setCenter(mapLimits.x * (view.getCenter().x > 0 ? 1 : -1), view.getCenter().y);
-
-	if (std::abs(view.getCenter().y) > mapLimits.y)
-		view.setCenter(view.getCenter().x, mapLimits.y * (view.getCenter().y > 0 ? 1 : -1));
-	//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-	canvas.setView(view);
-	
-	//\\\\\\\\\\\\\\\\\\\\\ View alteration ends
-
-
-
-	if (input().pointer().has_value()) {
-		if (input().isPressed(VInput::VInputType::A)) {
-			//map.toggleTile(view, input().pointer().value());
-		}
-	}
-
-	Actor& player = actors.back();
+	// alter player velocity based on their input
 	player.update(deltaT);
 
-	for (auto& parallax : parallaxes)
-		parallax.update(view);
+	// alter further velocity with gravity
+	//player.setVel(0, 1.25f, false);
 
-	if (VInput::isPressed(VInput::VInputType::C)) {
-		player.vel.y = -20.f;
-	}
+	// apply velocity to change player position
+	player.move(); // only accessible to SonicScene?
 
-	float tmpSpd{ 0.75f };
-	if (VInput::isHeld(VInput::LEFT)) {
-		player.vel.x = std::max(-10.f, player.vel.x - tmpSpd);
-		player.setAnimSequence(EmerlState::RUN);
-		player.flipSprite(0);
-	}
-	else if (VInput::isHeld(VInput::RIGHT)) {
-		player.vel.x = std::min(10.f, player.vel.x + tmpSpd);
-		player.setAnimSequence(EmerlState::RUN);
-		player.flipSprite(1);
-	}
-	if (VInput::isHeld(VInput::UP)) {
-		player.vel.y = std::max(-10.f, player.vel.y - tmpSpd);
-	}
-	else if (VInput::isHeld(VInput::DOWN)) {
-		player.vel.y = std::min(10.f, player.vel.y + tmpSpd);
-	}
+	//////////////////////////////////// COLLISIONS
 
-	// collision resolution
-	mapCollision(player);
 
-}
+	std::vector<sf::Vector2f> tileShape(4);
+	std::vector<sf::Vector2f> playerShape(4);
 
-void SonicScene::mapCollision(Actor& actor) {
-	actor.move(actor.vel);
-	//auto index = map.toIndex({ actor.getPosition().x, actor.getPosition().y + (actor.bbox.y + map.tileSize) / 2.f });
-	//	if (map.getTile(index.x, index.y)->type) {
-	//		actor.vel.y = 0;
-	//		auto tmp = map.toWorld(0, index.y);
-	//		actor.setPosition(actor.getPosition().x, tmp.y);
+	zone.setSize({ 96, 96 });
+	zone.setFillColor(sf::Color(0, 255, 0, 190));
+	int retry = 3;
+	do {
+		playerShape = player.getShape();
+		sf::Vector2i gridIndex(map.toIndex({ player.getX(), player.getY() }));
+		if (!map.getTile(gridIndex.x, gridIndex.y)->type)
+			break;
+		sf::Vector2f tilePosition{ map.toWorld(gridIndex) };
+
+		tileShape[0] = tilePosition;
+		tileShape[1] = tilePosition + sf::Vector2f({ map.getTileSize(), 0 });
+		tileShape[2] = tilePosition + sf::Vector2f({ map.getTileSize(), map.getTileSize() });
+		tileShape[3] = tilePosition + sf::Vector2f({ 0, map.getTileSize() });
+
+		if (isColliding(tileShape, playerShape)) {
+			zone.setFillColor(sf::Color(255, 0, 0, 190));
+			player.setPosition({ player.getX(), tilePosition.y - player.getHeight()/2.f });
+			player.setVel(player.getVelX(), 0.f);
+			retry--;
+		}
+		else
+			break;
+
+	} while (retry);
+
+	zone.setPosition(map.toWorld(map.toIndex({ player.getX(), player.getY() })));
+
+
+
+	//	sf::Vector2i scanTitle = map.toIndex(player.getPosition() + sf::Vector2f(0.f, player.bBox.getSize().y / 2.f));
+	//	auto worldTilePos = map.toWorld(scanTitle);
+	//	
+	//	zone.setPosition(worldTilePos);
+	//	z
+
+	//	if (map.getTile(scanTitle.x, scanTitle.y)->type && isColliding(zonehitbox, playerhitbox)) {
+	//		player.bBox.setPosition(
+	//			player.bBox.getPosition().x,
+	//			worldTilePos.y - (player.bBox.getSize().y / 2.f));// map.getTileSize());
+	//		player.setVel({ player.getVel().x, 0 }, true);
+
 	//	}
-	//	else {
-	//		actor.vel.y += 0;// 0.25f;
-	//	}
+	//	else
+	//		zone.setFillColor(sf::Color(0, 255, 0, 190));
 	//}
 
+
+
+	////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+
+	if (true) {
+
+		/////////////////////// View alteration
+		sf::View view{ canvas.getView() };
+
+		view.setCenter({ player.getX(), player.getY() });
+
+		// prevents camera from exceeding map limits
+		////////////////////////////////////
+		if (std::abs(view.getCenter().x) > mapLimits.x)
+			view.setCenter(mapLimits.x * (view.getCenter().x > 0 ? 1 : -1), view.getCenter().y);
+
+		if (std::abs(view.getCenter().y) > mapLimits.y)
+			view.setCenter(view.getCenter().x, mapLimits.y * (view.getCenter().y > 0 ? 1 : -1));
+		//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+		canvas.setView(view);
+
+		//\\\\\\\\\\\\\\\\\\\\\ View alteration ends
+
+
+		for (auto& parallax : parallaxes)
+			parallax.update(view);
+
+	}
+
+
 }
 
+
+// rectangle /2 redundant check optimization?
+bool SonicScene::isColliding(std::vector<sf::Vector2f>& shapeA, std::vector<sf::Vector2f>& shapeB) {
+	std::vector<sf::Vector2f> normals;
+	auto calcNormals{
+		[&normals](std::vector<sf::Vector2f>& shape) {
+			for (int vertex{ 0 }; vertex < shape.size() - 1; ++vertex) {
+				sf::Vector2f normal = shape[vertex + 1] - shape[vertex];
+				normals.emplace_back(-normal.y, normal.x);
+			}
+		}
+	};
+
+	// close the shape
+	shapeA.push_back(shapeA[0]);
+	shapeB.push_back(shapeB[0]);
+	calcNormals(shapeA);
+	calcNormals(shapeB);
+
+	// Checks if the [axis] line can be drawn between both shapes without intersecting with any of them
+	auto isSeperatingShapes {
+		[](const sf::Vector2f& axis, const std::vector<sf::Vector2f>& shape1, const std::vector<sf::Vector2f>& shape2) -> bool {
+			auto dotProduct{
+				[](const sf::Vector2f& vec1, const sf::Vector2f& vec2) -> float {
+					return vec1.x * vec2.x + vec1.y * vec2.y;
+				}
+			};
+			float aMin = std::numeric_limits<float>::max();
+
+			for (const auto& vertex : shape1) {
+				float scalar = dotProduct(axis, vertex);
+				aMin = std::min(aMin, scalar);
+			}
+
+			float bMax = std::numeric_limits<float>::lowest();
+			for (const auto& vertex : shape2) {
+				float scalar = dotProduct(axis, vertex);
+				bMax = std::max(bMax, scalar);
+			}
+			return aMin > bMax;
+		}
+	};
+	for (const sf::Vector2f& normal : normals) {
+		if (isSeperatingShapes(normal, shapeA, shapeB))
+			return false;
+	}
+	return true;
+}
 
 void SonicScene::onDraw(sf::RenderTexture& canvas) {
 
@@ -111,8 +178,7 @@ void SonicScene::onDraw(sf::RenderTexture& canvas) {
 	map.drawOn(canvas);
 
 	// draw game objects
-	for (Actor& actor : actors)
-		canvas.draw(actor);
+	canvas.draw(player);
 
 	sf::Text hud{ "[" + tos((int)canvas.getView().getCenter().x) + ", " + tos((int)-canvas.getView().getCenter().y) + "]", 
 		getGameFont(), 48};
@@ -123,4 +189,6 @@ void SonicScene::onDraw(sf::RenderTexture& canvas) {
 	hud.setPosition(center.x + (canvas.getView().getSize().x / 2) - 
 			hud.getString().getSize()*36.f, center.y - (canvas.getView().getSize().y / 2) + 32.f);
 	canvas.draw(hud);
+
+	canvas.draw(zone);
 }

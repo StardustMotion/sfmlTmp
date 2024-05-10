@@ -34,7 +34,7 @@ SonicMap::SonicMap() {
 	coordinate.setFillColor(sf::Color(255, 255, 255, 200));
 	coordinate.setOutlineColor(sf::Color(0, 0, 0, 200));
 	coordinate.setOutlineThickness(2.f);
-	coordinate.setCharacterSize(static_cast<unsigned int>(tileSize/8.f));	
+	coordinate.setCharacterSize(static_cast<unsigned int>(tileSize/4.f));	
 
 }
 
@@ -97,8 +97,8 @@ void SonicMap::drawOn(sf::RenderTarget& canvas) {
 		view.getCenter().y - (view.getSize().y / 2.f)
 	}) };
 	sf::Vector2i endIndex{
-		(startIndex.x + 1) + static_cast<int>((view.getSize().x / tileSize)),
-		(startIndex.y + 1) + static_cast<int>((view.getSize().y / tileSize))
+		std::min((startIndex.x + 2) + static_cast<int>(view.getSize().x / tileSize),mapSize.x),
+		std::min((startIndex.y + 2) + static_cast<int>(view.getSize().y / tileSize),mapSize.y)
 	};
 
 	for (auto x{ startIndex.x }; x < endIndex.x; ++x)

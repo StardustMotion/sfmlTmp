@@ -7,22 +7,34 @@
 #include "smVInputHandler.hpp"
 #include "smTile.hpp"
 #include "smSonicMap.hpp"
+#include "smPlayer.hpp"
 
-class SonicScene : public VInputHandler, public ResourceHandler
+
+
+class SonicScene : public ResourceHandler
 {
 	SonicMap map;
 	std::vector<Parallax> parallaxes;
-	std::vector<Actor> actors;
-
+	Player player;
+	constexpr static float gravity{ 0.05f }; // ?
 	sf::Vector2f offset{ 0.f,0.f };
 	sf::Vector2f mapLimits{ 2048.f, 1024.f }; // +/-
 	void camera(float x, float y);
+
+	sf::RectangleShape zone;
 
 public:
 	SonicScene(const sf::Vector2f& canvasSize);
 	~SonicScene();
 	void onUpdate(double deltaT, sf::RenderTexture& canvas);
 	void onDraw(sf::RenderTexture& canvas);
-	void mapCollision(Actor& actor);
+
+
+	/**
+	* checks if shapeA intersects with shapeB using separating axis theorem algorithm
+	* @param shapeA list of vertex in the order to draw the shape. Add the 1st index at the end another time (as to close the polygon)
+	* @return true if they collide
+	*/
+	bool isColliding(std::vector<sf::Vector2f>& shapeA, std::vector<sf::Vector2f>& shapeB);
 };
 
