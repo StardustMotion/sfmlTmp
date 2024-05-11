@@ -2,12 +2,17 @@
     "automappingRulesFile": "",
     "commands": [
     ],
-    "compatibilityVersion": 1100,
     "extensionsPath": "extensions",
     "folders": [
         "."
     ],
     "properties": [
+        {
+            "name": "gameScale",
+            "propertytype": "",
+            "type": "float",
+            "value": 2
+        }
     ],
     "propertyTypes": [
     ]

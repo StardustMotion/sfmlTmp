@@ -8,13 +8,13 @@
 #include "smLogger.hpp"
 
 // non-interactive plan to fill canvas with
-class Parallax : public ResourceHandler, public sf::Drawable {
+class Parallax : public ResourceHandler {
 	sf::Sprite sprite;
 	const float scrollFactor;
 	sf::Vector2f size, offset{ 0,0 };
 public:
 	Parallax(std::string&& texture, float scrollFactor = 1.f, float scale = 2.f);
-	void draw(sf::RenderTarget& canvas, sf::RenderStates states) const override;
+	void onDraw();
 	void update(const sf::View& view);
 	// update -> scroll
 };

@@ -16,7 +16,6 @@ enum EmerlState : uint8_t {
 
 class Actor : 
 	public sf::Transformable, 
-	public sf::Drawable, 
 	public ResourceHandler {
 
 	sf::Sprite sprite;
@@ -33,7 +32,7 @@ public:
 	sf::Vector2f bbox{ 32.f, 64.f };
 	Actor(std::string&& texture);
 	~Actor();
-	void draw(sf::RenderTarget& canvas, sf::RenderStates states) const override;
+	void draw();
 	void flipSprite(bool side);
 	void update(double deltaT);
 	void setAnimSequence(std::uint8_t val,bool loop = true);

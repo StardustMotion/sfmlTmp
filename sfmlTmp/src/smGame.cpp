@@ -10,24 +10,26 @@ Game::Game(sf::RenderWindow& window)
 	, inputManager{ window }
 	, font() {
 
+	sf::View view;
+	sf::Vector2f size = static_cast<sf::Vector2f>(window.getSize());
+	view.reset({
+		{ -size / 2.f },
+		{ size }
+		});
+	canvas.create(window.getSize().x, window.getSize().y);
+	canvas.setView(view);
+
 	// add a hook for game elements to reach those
 	ResourceHandler::audioManager = &audioManager;
 	ResourceHandler::textureManager = &textureManager;
 	VInputHandler::vInputs = &inputManager.vInputs;
+	ResourceHandler::renderTexture = &canvas;
 
 	if (!font.loadFromFile("res/font/sonic.ttf"))
 		Logger::warn("Couldn't load Sonic game font!!");
 
 	ResourceHandler::font = &font;
 
-	sf::View view;
-	sf::Vector2f size = static_cast<sf::Vector2f>(window.getSize());
-	view.reset({
-		{ -size/2.f },
-		{ size }
-	});		
-	canvas.create(window.getSize().x, window.getSize().y);
-	canvas.setView(view);
 
 	run();
 }
@@ -35,7 +37,7 @@ Game::~Game() { ; }
 
 // single threaded for now
 void Game::run() {
-	SonicScene scene(canvas.getView().getSize());
+	SonicScene scene{};
 	double fps = 30.0;
 	double deltaT = 1.0 / fps;
 	Logger::info("\n===================\nStarting up (" + tos(fps) + " FPS)...\n================== = ");
@@ -59,13 +61,13 @@ void Game::run() {
 }
 
 void Game::update(double deltaT, SonicScene& scene) {
-	scene.onUpdate(deltaT, canvas);
+	scene.onUpdate(deltaT);
 }
 
 void Game::render(SonicScene& scene) {
 	window.clear();
 	canvas.clear();
-	scene.onDraw(canvas); // lend blank canvas to the scene to fill on
+	scene.onDraw();
 	canvas.display();
 
 	// transfer canvas to final window

@@ -32,9 +32,9 @@ Actor::Actor(std::string&& texture) {
 Actor::~Actor() { ; }
 
 
-void Actor::draw(sf::RenderTarget& canvas, sf::RenderStates states) const {
-	canvas.draw(sprite);
-	canvas.draw(bboxSprite);
+void Actor::draw() {
+	canvas().draw(sprite);
+	canvas().draw(bboxSprite);
 
 	sf::CircleShape dot;
 	dot.setRadius(4);
@@ -43,7 +43,7 @@ void Actor::draw(sf::RenderTarget& canvas, sf::RenderStates states) const {
 	dot.setPosition(this->getPosition());
 	dot.setOrigin(dot.getRadius(), dot.getRadius());
 
-	canvas.draw(dot);
+	canvas().draw(dot);
 
 	unsigned int fontSize = 12;
 
@@ -54,7 +54,7 @@ void Actor::draw(sf::RenderTarget& canvas, sf::RenderStates states) const {
 	poato.setPosition(sprite.getPosition() + sprite.getOrigin());
 	poato.setOrigin(static_cast<float>(poato.getString().getSize() * fontSize / 2.f), 6);
 	poato.setFillColor(sf::Color::Yellow);
-	canvas.draw(poato);
+	canvas().draw(poato);
 }
 
 

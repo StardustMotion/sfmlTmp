@@ -2,6 +2,12 @@
 
 
 SonicMap::SonicMap() {
+
+	mapCanvas.create(canvas().getSize().x, canvas().getSize().y);
+	slopeMask.setPointCount(3);
+	slopeMask.setPoint(0, { 0,0 });
+	slopeMask.setFillColor(sf::Color(0, 255, 255, 0));
+
 	// parse map file data / parsing worlds maybe for current year+10
 	tson::Tileson tileson;
 	std::unique_ptr<tson::Map> jsonData = tileson.parse(".\\res\\texture\\map\\wilywars_heat.tmj");
@@ -9,6 +15,8 @@ SonicMap::SonicMap() {
 		mapSize.x = jsonData->getSize().x;
 		mapSize.y = jsonData->getSize().y;
 		map.resize(static_cast<std::size_t>(mapSize.x * mapSize.y), Tile());
+
+		
 
 		tileSprite.setTexture(*img().getTexture(".\\res\\texture\\map\\wilywars_heat").get());
 		float gameScale = jsonData->get<float>("gameScale");
@@ -19,11 +27,30 @@ SonicMap::SonicMap() {
 		halfTileSize = tileSize / 2.f;
 		tileSprite.setScale(gameScale, gameScale);
 		tileSprite.setOrigin(tileBaseSize / 2.f, tileBaseSize / 2.f);
-		tilesetColumns = jsonData->getTileset("wilywars_heat")->getColumns();
+		tilesetColumns = jsonData->getTileset("tileset")->getColumns();
 
-		auto& tileData = jsonData->getLayer("heatman_test")->getTileData();
+		auto& tileData = jsonData->getLayer("tiles")->getTileData();
 		for (const auto& [id, tile] : tileData)
 			setTile(std::get<0>(id), std::get<1>(id), Tile(tile->getId()));
+
+		auto slopeData = jsonData->getLayer("slopes");
+		for (const auto& slope : slopeData->getObjectsByName("ab")) {
+			SonicSlope obj;
+
+			obj.pos = toWorld({
+				slope.getPosition().x / tileBaseSize,
+				slope.getPosition().y / tileBaseSize 
+			});
+
+			int angle = static_cast<int>(slope.getRotation()) / 90; // 0 
+			obj.direction = {
+				static_cast<float>((angle % 2 ? slope.getSize().y : slope.getSize().x)) 
+					* gameScale * (angle/2 ? -1 : 1),
+				static_cast<float>((angle % 2 ? slope.getSize().x : slope.getSize().y))
+					* gameScale * (!((angle - 1) & 0x2) ? 1 : -1)
+			};			
+			slopes.push_back({ obj });
+		}
 	}
 	else
 		Logger::error("Couldn't load SonicMap");
@@ -89,8 +116,10 @@ void SonicMap::toggleDebug() {
 
 
 
-void SonicMap::drawOn(sf::RenderTarget& canvas) {
-	const sf::View& view = canvas.getView();
+void SonicMap::onDraw() {
+	mapCanvas.clear({ 0,0,0,0 });
+	const sf::View& view = canvas().getView();
+	mapCanvas.setView(view);
 
 	sf::Vector2i startIndex{ toIndex({
 		view.getCenter().x - (view.getSize().x / 2.f),
@@ -100,6 +129,8 @@ void SonicMap::drawOn(sf::RenderTarget& canvas) {
 		std::min((startIndex.x + 2) + static_cast<int>(view.getSize().x / tileSize),mapSize.x),
 		std::min((startIndex.y + 2) + static_cast<int>(view.getSize().y / tileSize),mapSize.y)
 	};
+
+
 
 	for (auto x{ startIndex.x }; x < endIndex.x; ++x)
 		for (auto y{ startIndex.y }; y < endIndex.y; ++y) {
@@ -111,17 +142,35 @@ void SonicMap::drawOn(sf::RenderTarget& canvas) {
 					(((type - 1) / tilesetColumns) * tileBaseSize),
 					tileBaseSize, tileBaseSize
 				});
-				canvas.draw(tileSprite);
+				mapCanvas.draw(tileSprite);
 			}
 		}
+
+	// Draw a mask on tiles to shape the slopes
+	for (const auto& slope : slopes) {
+		slopeMask.setPosition(slope.pos);
+		slopeMask.setPoint(1, { slope.direction });
+		if (slope.direction.x < 0)
+			if (slope.direction.y < 0) slopeMask.setPoint(2, { +slope.direction.x, 0 });
+			else slopeMask.setPoint(2, { 0, +slope.direction.y });
+		else
+			if (slope.direction.y < 0) slopeMask.setPoint(2, { 0, +slope.direction.y });
+			else slopeMask.setPoint(2, { +slope.direction.x, 0 });
+		mapCanvas.draw(slopeMask, sf::BlendNone);
+	}
+
+	mapCanvas.display();
+	sf::Sprite mapCanvasTexture { mapCanvas.getTexture() };
+	mapCanvasTexture.setPosition(view.getCenter()-(view.getSize()/2.f));
+	canvas().draw(mapCanvasTexture);
 
 	if (debug) {
 		auto drawGrid { 
 			[&]  (bool axis, int index) {
 				coordinate.setString("[" + std::to_string(index) + "]\n"
 					+std::to_string(static_cast<int>(axis ? coordinate.getPosition().y : coordinate.getPosition().x)));
-				canvas.draw(gridLine);
-				canvas.draw(coordinate);
+				canvas().draw(gridLine);
+				canvas().draw(coordinate);
 				if (axis) {
 					coordinate.move(0.f, tileSize);
 					gridLine.move(0.f, tileSize);

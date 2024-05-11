@@ -4,10 +4,10 @@
 #include "smVInputHandler.hpp"
 
 
-class Player : public sf::Drawable, public ResourceHandler, public VInputHandler
+class Player : public ResourceHandler, public VInputHandler
 {
 	// default unscaled bounding box / scaled factors
-	static constexpr float initWidth{ 32 }, initHeight{ 40 }, initScale{ 4.f };
+	static constexpr float initWidth{ 32 }, initHeight{ 40 }, initScale{ 8.f };
 	static constexpr std::string_view texture{ ".\\res\\texture\\actor\\ww_metal" };
 
 	// position/size stored here, not in Player itself
@@ -19,7 +19,7 @@ class Player : public sf::Drawable, public ResourceHandler, public VInputHandler
 
 public:
 	Player();
-	void draw(sf::RenderTarget& canvas, sf::RenderStates states) const override;
+	void onDraw();
 	void update(double deltaT);
 
 	// replace=false to add velocity instead of setting it

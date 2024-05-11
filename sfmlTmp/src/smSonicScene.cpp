@@ -1,15 +1,15 @@
 #include "smSonicScene.hpp"
 
 
-SonicScene::SonicScene(const sf::Vector2f& canvasSize)
+SonicScene::SonicScene()
 	: map ()
 	, parallaxes{ Parallax_Heatman() }
 	, player() {
 
 	// camera CENTER cant exceed those
 	mapLimits = {
-		(((map.getMapSize().x * map.getTileSize()) - canvasSize.x) / 2.f) - 1.f,
-		(((map.getMapSize().y * map.getTileSize()) - canvasSize.y) / 2.f) - 1.f,
+		(((map.getMapSize().x * map.getTileSize()) - canvas().getSize().x) / 2.f) - 1.f,
+		(((map.getMapSize().y * map.getTileSize()) - canvas().getSize().y) / 2.f) - 1.f,
 	};
 
 	//actors.emplace_back(ActorEmerl());
@@ -20,7 +20,7 @@ SonicScene::~SonicScene() { ; }
 
 
 
-void SonicScene::onUpdate(double deltaT, sf::RenderTexture& canvas) {
+void SonicScene::onUpdate(double deltaT) {
 
 	// alter player velocity based on their input
 	player.update(deltaT);
@@ -33,15 +33,34 @@ void SonicScene::onUpdate(double deltaT, sf::RenderTexture& canvas) {
 
 	//////////////////////////////////// COLLISIONS
 
+	pd.setFillColor(sf::Color::Red);
+	pd.setRadius(256.f);
+	pd.setPosition(0, 0);
 
 	std::vector<sf::Vector2f> tileShape(4);
 	std::vector<sf::Vector2f> playerShape(4);
+	tileScanners.clear();
 
-	zone.setSize({ 96, 96 });
-	zone.setFillColor(sf::Color(0, 255, 0, 190));
 	int retry = 3;
 	do {
 		playerShape = player.getShape();
+
+		for (int i{ 0 }; i < 4; ++i) {
+			sf::RectangleShape tmp;
+			tmp.setSize({ 96, 96 });
+			sf::Vector2i gridIndex(map.toIndex(playerShape[i]));
+			if (map.getTile(gridIndex.x, gridIndex.y)->type)
+				tmp.setFillColor(sf::Color(255, 0, 0, 190));
+			else
+				tmp.setFillColor(sf::Color(0, 255, 0, 190));
+
+			tmp.setPosition(map.toWorld(gridIndex));
+			tileScanners.push_back(tmp);
+
+		}
+
+
+
 		sf::Vector2i gridIndex(map.toIndex({ player.getX(), player.getY() }));
 		if (!map.getTile(gridIndex.x, gridIndex.y)->type)
 			break;
@@ -53,7 +72,6 @@ void SonicScene::onUpdate(double deltaT, sf::RenderTexture& canvas) {
 		tileShape[3] = tilePosition + sf::Vector2f({ 0, map.getTileSize() });
 
 		if (isColliding(tileShape, playerShape)) {
-			zone.setFillColor(sf::Color(255, 0, 0, 190));
 			player.setPosition({ player.getX(), tilePosition.y - player.getHeight()/2.f });
 			player.setVel(player.getVelX(), 0.f);
 			retry--;
@@ -63,14 +81,12 @@ void SonicScene::onUpdate(double deltaT, sf::RenderTexture& canvas) {
 
 	} while (retry);
 
-	zone.setPosition(map.toWorld(map.toIndex({ player.getX(), player.getY() })));
 
 
 
 	//	sf::Vector2i scanTitle = map.toIndex(player.getPosition() + sf::Vector2f(0.f, player.bBox.getSize().y / 2.f));
 	//	auto worldTilePos = map.toWorld(scanTitle);
 	//	
-	//	zone.setPosition(worldTilePos);
 	//	z
 
 	//	if (map.getTile(scanTitle.x, scanTitle.y)->type && isColliding(zonehitbox, playerhitbox)) {
@@ -80,8 +96,6 @@ void SonicScene::onUpdate(double deltaT, sf::RenderTexture& canvas) {
 	//		player.setVel({ player.getVel().x, 0 }, true);
 
 	//	}
-	//	else
-	//		zone.setFillColor(sf::Color(0, 255, 0, 190));
 	//}
 
 
@@ -92,7 +106,7 @@ void SonicScene::onUpdate(double deltaT, sf::RenderTexture& canvas) {
 	if (true) {
 
 		/////////////////////// View alteration
-		sf::View view{ canvas.getView() };
+		sf::View view{ canvas().getView() };
 
 		view.setCenter({ player.getX(), player.getY() });
 
@@ -105,7 +119,7 @@ void SonicScene::onUpdate(double deltaT, sf::RenderTexture& canvas) {
 			view.setCenter(view.getCenter().x, mapLimits.y * (view.getCenter().y > 0 ? 1 : -1));
 		//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-		canvas.setView(view);
+		canvas().setView(view);
 
 		//\\\\\\\\\\\\\\\\\\\\\ View alteration ends
 
@@ -167,28 +181,30 @@ bool SonicScene::isColliding(std::vector<sf::Vector2f>& shapeA, std::vector<sf::
 	return true;
 }
 
-void SonicScene::onDraw(sf::RenderTexture& canvas) {
+void SonicScene::onDraw() {
 
 
 	// draw backgrounds/foregrounds
 	for (auto& parallax : parallaxes)
-		canvas.draw(parallax);
+		parallax.onDraw();
 
 	// draw the tileset
-	map.drawOn(canvas);
+	map.onDraw();
 
 	// draw game objects
-	canvas.draw(player);
+	player.onDraw();
 
-	sf::Text hud{ "[" + tos((int)canvas.getView().getCenter().x) + ", " + tos((int)-canvas.getView().getCenter().y) + "]", 
+	sf::Text hud{ "[" + tos((int)canvas().getView().getCenter().x) + ", " + tos((int)-canvas().getView().getCenter().y) + "]",
 		getGameFont(), 48};
 	hud.setFillColor(sf::Color::Cyan);
 	hud.setOutlineColor(sf::Color::Black);
 	hud.setOutlineThickness(6.f);
-	sf::Vector2f center{ canvas.getView().getCenter() };
-	hud.setPosition(center.x + (canvas.getView().getSize().x / 2) - 
-			hud.getString().getSize()*36.f, center.y - (canvas.getView().getSize().y / 2) + 32.f);
-	canvas.draw(hud);
+	sf::Vector2f center{ canvas().getView().getCenter() };
+	hud.setPosition(center.x + (canvas().getView().getSize().x / 2) -
+			hud.getString().getSize()*36.f, center.y - (canvas().getView().getSize().y / 2) + 32.f);
+	canvas().draw(hud);
 
-	canvas.draw(zone);
+	for (auto scanner : tileScanners)
+		canvas().draw(scanner);
+
 }

@@ -38,9 +38,9 @@ void Player::update(double deltaT) {
 	//	print();
 }
 
-void Player::draw(sf::RenderTarget& canvas, sf::RenderStates states) const {
-	canvas.draw(sprite);
-	canvas.draw(boundingBox);
+void Player::onDraw() {
+	canvas().draw(sprite);
+	canvas().draw(boundingBox);
 }
 
 void Player::setVel(float velx, float vely, bool replace) {

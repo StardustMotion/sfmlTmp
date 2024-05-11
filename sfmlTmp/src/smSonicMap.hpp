@@ -1,8 +1,14 @@
 #pragma once
 #include <vector>
+#include <numbers>
 #include "tileson/tileson.h"
 #include "smTile.hpp"
 #include "smResourceHandler.hpp"
+
+struct SonicSlope {
+	sf::Vector2f pos;
+	sf::Vector2f direction; // vector defining steepness (hypotenuse of the right triangle)
+};
 
 class SonicMap : public ResourceHandler
 {
@@ -14,6 +20,9 @@ private:
 	int tilesetColumns{ 2 };
 	bool debug{ true };
 	sf::Sprite tileSprite;
+	std::vector<SonicSlope> slopes;
+	sf::ConvexShape slopeMask;
+	sf::RenderTexture mapCanvas;
 
 	// debug grid
 	sf::RectangleShape gridLine;
@@ -21,7 +30,7 @@ private:
 public:
 	SonicMap();
 
-	void drawOn(sf::RenderTarget& canvas);
+	void onDraw();
 
 	// Return { x (columns), y (rows) } vector of map size
 	const sf::Vector2i& getMapSize() const;

@@ -3,13 +3,19 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "wilywars_heat.tmx",
+    "activeFile": "utils/obj.tsx",
     "expandedProjectPaths": [
-        "."
+        "utils",
+        ".",
+        "templates"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "": {
+            "scaleInDock": 1
+        },
+        "#wilywars_heat": {
+            "dynamicWrapping": false,
             "scaleInDock": 1
         },
         "C:/Users/ui/Desktop/tmw_desert_spacing.tsx": {
@@ -28,6 +34,58 @@
             "scaleInDock": 1,
             "scaleInEditor": 5.5
         },
+        "G:/bin/tiled/examples/orthogonal-outside.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 186.33333333333331,
+                "y": 386
+            }
+        },
+        "G:/bin/tiled/examples/orthogonal-outside.tmx#outdoor": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1
+        },
+        "G:/bin/tiled/examples/sticker-knight/map/objs.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 0.33
+        },
+        "G:/bin/tiled/examples/sticker-knight/map/sandbox.tmx": {
+            "expandedObjectLayers": [
+                7,
+                8
+            ],
+            "scale": 1,
+            "selectedLayer": 8,
+            "viewCenter": {
+                "x": 1694.5,
+                "y": 762
+            }
+        },
+        "map2test.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": -0.5,
+                "y": -2
+            }
+        },
+        "sonicObjects.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "test.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "utils/obj.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
         "wilywars_heat.tmj": {
             "scale": 0.1533203125,
             "selectedLayer": 0,
@@ -40,14 +98,28 @@
             "scaleInDock": 1
         },
         "wilywars_heat.tmx": {
-            "scale": 1.5,
-            "selectedLayer": 0,
+            "expandedObjectLayers": [
+                3
+            ],
+            "scale": 5.5,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 228.33333333333331,
-                "y": 135.33333333333334
+                "x": 47.18181818181819,
+                "y": 34.909090909090914
             }
         },
+        "wilywars_heat.tmx#obj": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "wilywars_heat.tmx#tileset": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 5.5
+        },
         "wilywars_heat.tmx#wilywars_heat": {
+            "dynamicWrapping": false,
             "scaleInDock": 1,
             "scaleInEditor": 5.5
         },
@@ -57,7 +129,9 @@
         }
     },
     "last.exportedFilePath": "C:/Users/ui/Desktop/onb/playground/sfmlTmp/res/texture/map",
-    "last.imagePath": "G:/bin/tiled/examples",
+    "last.externalTilesetPath": "C:/Users/ui/Desktop/onb/playground/sfmlTmp/res/texture/map/utils",
+    "last.imagePath": "C:/Users/ui/Desktop/onb/playground/sfmlTmp/res/texture/map",
+    "last.objectTemplatePath": "C:/Users/ui/Desktop/onb/playground/sfmlTmp/res/texture/map/utils",
     "map.height": 64,
     "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
     "map.lastUsedFormat": "tmx",
@@ -66,22 +140,30 @@
     "map.width": 128,
     "openFiles": [
         "wilywars_heat.tmx",
-        "wilywars_heat.tsx"
+        "utils/obj.tsx"
     ],
     "project": "main.tiled-project",
     "property.type": "float",
     "recentFiles": [
+        "utils/obj.tsx",
         "wilywars_heat.tmx",
+        "sonicObjects.tsx",
+        "G:/bin/tiled/examples/sticker-knight/map/objs.tsx",
+        "test.tsx",
+        "G:/bin/tiled/examples/sticker-knight/map/sandbox.tmx",
+        "map2test.tmx",
+        "G:/bin/tiled/examples/orthogonal-outside.tmx",
         "wilywars_heat.tmj",
         "G:/bin/tiled/examples/desert.tsx",
         "G:/bin/tiled/examples/desert.tmx",
-        "C:/Users/ui/Desktop/tmw_desert_spacing.tsx",
-        "wilywars_heat.tsx"
+        "C:/Users/ui/Desktop/tmw_desert_spacing.tsx"
     ],
     "tileset.embedInMap": true,
+    "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
         "height": 16,
         "width": 16
-    }
+    },
+    "tileset.type": 0
 }

@@ -19,8 +19,8 @@ Parallax::Parallax(std::string&& texture, float scrollFactor, float scale)
 }
 
 
-void Parallax::draw(sf::RenderTarget& canvas, sf::RenderStates states) const {
-	canvas.draw(sprite);
+void Parallax::onDraw() {
+	canvas().draw(sprite);
 }
 
 void Parallax::update(const sf::View& view) {

@@ -22,12 +22,14 @@ class SonicScene : public ResourceHandler
 	void camera(float x, float y);
 
 	sf::RectangleShape zone;
+	std::vector<sf::RectangleShape> tileScanners;
+	sf::CircleShape pd;
 
 public:
-	SonicScene(const sf::Vector2f& canvasSize);
+	SonicScene();
 	~SonicScene();
-	void onUpdate(double deltaT, sf::RenderTexture& canvas);
-	void onDraw(sf::RenderTexture& canvas);
+	void onUpdate(double deltaT);
+	void onDraw();
 
 
 	/**
