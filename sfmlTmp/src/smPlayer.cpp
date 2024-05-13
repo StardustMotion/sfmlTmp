@@ -13,26 +13,35 @@ Player::Player() {
 
 
 void Player::update(double deltaT) {
+	
 	float maxSpd = 8.f;
 	float sped = 0.35f;
-	if (VInput::isHeld(VInput::LEFT))
+	if (VInput::isHeld(VInput::LEFT))		
 		setVel(std::max(getVelX() - sped, -maxSpd), getVelY());
 	else if (VInput::isHeld(VInput::RIGHT))
 		setVel(std::min(getVelX() + sped, maxSpd), getVelY());
 	else if (std::abs(getVelX()) < sped * 4.f)
 		setVel(0, getVelY());
 
-
-	if (VInput::isHeld(VInput::UP))
+	
+	if (VInput::isHeld(VInput::UP)) {
 		setVel(getVelX(), std::max(getVelY() - sped, -maxSpd));
-	else if (VInput::isHeld(VInput::DOWN))
+	}
+	else if (VInput::isHeld(VInput::DOWN)) {
 		setVel(getVelX(), std::min(getVelY() + sped, +maxSpd));
+	}
 	else if (std::abs(getVelY()) < sped * 4.f)
 		setVel(getVelX(), 0);
 
 
-	if (VInput::isPressed(VInput::A))
-		setVel(getVelX(), -18.f);
+	//if (VInput::isPressed(VInput::A))
+	//	setVel(getVelX(), -18.f);
+	if (VInput::isHeld(VInput::A))
+		setAngle(2.f);
+	if (VInput::isHeld(VInput::B))
+		setAngle(-2.f);
+	if (VInput::isPressed(VInput::C))
+		setAngle(+90.f);
 
 	//if (VInput::isHeld(VInput::VInputType::C))
 	//	print();
@@ -54,6 +63,8 @@ float Player::getX() const { return boundingBox.getPosition().x ; }
 float Player::getY() const { return boundingBox.getPosition().y; }
 float Player::getVelX() const { return velocity.x; }
 float Player::getVelY() const { return velocity.y; }
+float Player::getAngle() { return boundingBox.getRotation(); }
+
 
 
 void Player::move() {
@@ -66,18 +77,28 @@ void Player::setPosition(sf::Vector2f position) {
 	sprite.setPosition(boundingBox.getPosition());
 }
 
-std::vector<sf::Vector2f> Player::getShape() const {
-	std::vector<sf::Vector2f> vertexes(4);
-	for (int i{ 0 }; i < 4; ++i)
-		vertexes[i] = boundingBox.getTransform() * boundingBox.getPoint(i);
-	return vertexes;
+void Player::setAngle(float angle, bool replace) {
+	if (replace)
+		boundingBox.setRotation(angle);
+	else
+		boundingBox.setRotation(getAngle() + angle);
+	sprite.setRotation(boundingBox.getRotation());
+}
+
+std::array<sf::Vector2f,4> Player::getShape() const {
+	return {
+		boundingBox.getTransform() * boundingBox.getPoint(0),
+		boundingBox.getTransform() * boundingBox.getPoint(1),
+		boundingBox.getTransform() * boundingBox.getPoint(2),
+		boundingBox.getTransform() * boundingBox.getPoint(3),
+	};
 }
 
 
 
 //void Player::print() {
 //	auto pos = bBox.getPosition();
-//	Logger::debug("Player (" + 
+//	lo::debug("Player (" + 
 //		tos((int) bBox.getSize().x) + "," + tos((int) bBox.getSize().y)
 //		+ ") [pos " + tos(pos.x) + ", " + tos(pos.y) + "] "
 //		+ ") <spd " + tos(vel.x) + ", " + tos(vel.y) + "> ");

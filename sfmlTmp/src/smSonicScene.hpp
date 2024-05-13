@@ -20,11 +20,15 @@ class SonicScene : public ResourceHandler
 	sf::Vector2f offset{ 0.f,0.f };
 	sf::Vector2f mapLimits{ 2048.f, 1024.f }; // +/-
 	void camera(float x, float y);
+	std::vector<std::pair<int, int>> rasterMap;
+	int rasterStart, rasterHeight;
 
 	sf::RectangleShape zone;
 	std::vector<sf::RectangleShape> tileScanners;
-	sf::CircleShape pd;
 
+	// detects all tiles unit is on contact with
+	// Bresenham's line algorithm + "static" rasterization
+	void tileScan();
 public:
 	SonicScene();
 	~SonicScene();

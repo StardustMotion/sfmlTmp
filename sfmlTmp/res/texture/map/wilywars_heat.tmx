@@ -4,7 +4,7 @@
   <export target="wilywars_heat.tmj" format="json"/>
  </editorsettings>
  <properties>
-  <property name="gameScale" type="float" value="3"/>
+  <property name="gameScale" type="float" value="2"/>
  </properties>
  <tileset firstgid="1" name="tileset" tilewidth="16" tileheight="16" tilecount="20" columns="4" objectalignment="center">
   <image source="wilywars_heat.png" width="64" height="80"/>

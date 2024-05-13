@@ -7,7 +7,7 @@
 class Player : public ResourceHandler, public VInputHandler
 {
 	// default unscaled bounding box / scaled factors
-	static constexpr float initWidth{ 32 }, initHeight{ 40 }, initScale{ 8.f };
+	static constexpr float initWidth{ 32 }, initHeight{ 64 }, initScale{ 4.0f };
 	static constexpr std::string_view texture{ ".\\res\\texture\\actor\\ww_metal" };
 
 	// position/size stored here, not in Player itself
@@ -31,12 +31,14 @@ public:
 	float getY() const;
 	float getVelX() const;
 	float getVelY() const;
+	float getAngle();
 
 	// applies my current velocity to my position
 	void move();
 
 	void setPosition(sf::Vector2f position);
-	std::vector<sf::Vector2f> getShape() const;
+	void setAngle(float angle, bool replace = false);
+	std::array<sf::Vector2f, 4> getShape() const;
 
 
 };
