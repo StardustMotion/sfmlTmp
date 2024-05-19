@@ -9,6 +9,7 @@ Player::Player() {
 	boundingBox.setFillColor(sf::Color(255, 0, 0, 128));
 	boundingBox.setSize({ initWidth * initScale, initHeight * initScale });
 	boundingBox.setOrigin(initWidth * initScale / 2.f, initHeight * initScale / 2.f);
+	setAngle(15.f+255.f);
 }
 
 
@@ -34,14 +35,14 @@ void Player::update(double deltaT) {
 		setVel(getVelX(), 0);
 
 
-	//if (VInput::isPressed(VInput::A))
-	//	setVel(getVelX(), -18.f);
+	if (VInput::isPressed(VInput::C))
+		setVel(getVelX(), -18.f);
+
+
 	if (VInput::isHeld(VInput::A))
 		setAngle(2.f);
 	if (VInput::isHeld(VInput::B))
 		setAngle(-2.f);
-	if (VInput::isPressed(VInput::C))
-		setAngle(+90.f);
 
 	//if (VInput::isHeld(VInput::VInputType::C))
 	//	print();

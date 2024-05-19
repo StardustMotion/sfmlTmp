@@ -74,7 +74,7 @@ float SonicMap::getTileSize() const {
 }
 
 sf::Vector2i SonicMap::toIndex(const sf::Vector2f worldPosition) const {
-	int x = (mapSize.x >> 1) + static_cast<int>(std::roundf((worldPosition.x-halfTileSize) / tileSize));
+	int x = (mapSize.x >> 1) + static_cast<int>(std::roundf((worldPosition.x - halfTileSize) / tileSize));
 	if (x < 0) x = 0; else if (x >= mapSize.x) x = mapSize.x - 1;
 	int y = (mapSize.y >> 1) + static_cast<int>(std::roundf((worldPosition.y - halfTileSize) / tileSize));
 	if (y < 0) y = 0; else if (y >= mapSize.y) y = mapSize.y - 1;

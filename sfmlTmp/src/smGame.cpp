@@ -2,6 +2,8 @@
 #include <SFML/Window/Event.hpp>
 #include "smVInput.hpp"
 
+bool Game::debug{ true };
+
 Game::Game(sf::RenderWindow& window)
 	: window(window)
 	, canvas()

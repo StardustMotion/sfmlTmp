@@ -1,4 +1,5 @@
 #pragma once
+#include <numeric>
 #include <SFML/Graphics.hpp>
 #include "smResourceHandler.hpp"
 #include "smParallax.hpp"
@@ -20,8 +21,11 @@ class SonicScene : public ResourceHandler
 	sf::Vector2f offset{ 0.f,0.f };
 	sf::Vector2f mapLimits{ 2048.f, 1024.f }; // +/-
 	void camera(float x, float y);
+
+
 	std::vector<std::pair<int, int>> rasterMap;
-	int rasterStart, rasterHeight;
+	sf::Vector2i collisionPos, collisionSize;
+	sf::RectangleShape tileCollision;
 
 	sf::RectangleShape zone;
 	std::vector<sf::RectangleShape> tileScanners;
@@ -29,6 +33,7 @@ class SonicScene : public ResourceHandler
 	// detects all tiles unit is on contact with
 	// Bresenham's line algorithm + "static" rasterization
 	void tileScan();
+	std::vector<sf::CircleShape> detect;
 public:
 	SonicScene();
 	~SonicScene();

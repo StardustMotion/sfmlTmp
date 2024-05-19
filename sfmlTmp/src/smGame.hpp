@@ -22,6 +22,7 @@ private:
 	sf::Font font;
 
 public:
+	static bool debug;
 	Game(sf::RenderWindow& window);
 	~Game();
 
