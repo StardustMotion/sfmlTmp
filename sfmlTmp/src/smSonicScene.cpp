@@ -3,7 +3,7 @@
 
 SonicScene::SonicScene()
 	: map ()
-	, parallaxes{ Parallax_Heatman() }
+	, parallaxes{ Parallax_Hardman() }
 	, player() {
 
 	// camera CENTER cant exceed those
@@ -27,7 +27,7 @@ void SonicScene::onUpdate(double deltaT) {
 	player.update(deltaT);
 
 	// gravity
-	//player.setVel(0, 0.5f, false);
+	//player.setVel(0, 0.8f, false);
 
 	// t -> t+1
 	player.move();
@@ -35,53 +35,6 @@ void SonicScene::onUpdate(double deltaT) {
 	//////////////////////////////////// COLLISIONS
 
 	tileScan();
-
-	
-
-
-	//std::vector<sf::Vector2f> tileShape(4);
-	//std::vector<sf::Vector2f> playerShape(4);
-	//tileScanners.clear();
-
-
-
-
-	//	sf::Vector2i gridIndex(map.toIndex({ player.getX(), player.getY() }));
-	//	if (!map.getTile(gridIndex.x, gridIndex.y)->type)
-	//		break;
-	//	sf::Vector2f tilePosition{ map.toWorld(gridIndex) };
-
-	//	tileShape[0] = tilePosition;
-	//	tileShape[1] = tilePosition + sf::Vector2f({ map.getTileSize(), 0 });
-	//	tileShape[2] = tilePosition + sf::Vector2f({ map.getTileSize(), map.getTileSize() });
-	//	tileShape[3] = tilePosition + sf::Vector2f({ 0, map.getTileSize() });
-
-	//	if (isColliding(tileShape, playerShape)) {
-	//		player.setPosition({ player.getX(), tilePosition.y - player.getHeight()/2.f });
-	//		player.setVel(player.getVelX(), 0.f);
-	//		retry--;
-	//	}
-	//	else
-	//		break;
-
-	//} while (retry);
-
-
-
-
-	//	sf::Vector2i scanTitle = map.toIndex(player.getPosition() + sf::Vector2f(0.f, player.bBox.getSize().y / 2.f));
-	//	auto worldTilePos = map.toWorld(scanTitle);
-	//	
-	//	z
-
-	//	if (map.getTile(scanTitle.x, scanTitle.y)->type && isColliding(zonehitbox, playerhitbox)) {
-	//		player.bBox.setPosition(
-	//			player.bBox.getPosition().x,
-	//			worldTilePos.y - (player.bBox.getSize().y / 2.f));// map.getTileSize());
-	//		player.setVel({ player.getVel().x, 0 }, true);
-
-	//	}
-	//}
 
 
 
@@ -202,30 +155,20 @@ void SonicScene::onDraw() {
 
 
 void SonicScene::tileScan() {
-
-
-
 	const std::array<sf::Vector2f, 4> shape = player.getShape();
 	std::array<sf::Vector2i, 4> grid{
 		map.toIndex(shape[0]),
 		map.toIndex(shape[1]),
 		map.toIndex(shape[2]),
+		map.toIndex(shape[3]),
 	};
 
-	grid[3] = grid[2] - (grid[1] - grid[0]); // consistant rectangle
-	Logger::info("scan " + tos(player.getAngle()) 
-		+ tos(grid[0].x) + ", " + tos(grid[0].y) + " ||| "
-		+ tos(grid[1].x) + ", " + tos(grid[1].y) + " ||| "
-		+ tos(grid[2].x) + ", " + tos(grid[2].y) + " ||| "
-		+ tos(grid[3].x) + ", " + tos(grid[3].y));
-
-
 	char angle = static_cast<int>(player.getAngle()) / 90.f;
-	bool deg90 = angle & 0x1;
-
 	// tile scan top/left most position
 	collisionPos.x = grid[(3 - angle) & 0b11].x;
 	collisionPos.y = grid[(4 - angle) & 0b11].y;
+	bool deg90 = angle & 0x1;
+
 
 	if (deg90) {
 		collisionSize.y = std::abs(grid[3].y - grid[1].y);
@@ -240,92 +183,72 @@ void SonicScene::tileScan() {
 	// -----------------------------------------------
 	//					AABB
 	// -----------------------------------------------
-	if (((grid[0].x == grid[1].x) && (grid[1].y == grid[2].y)) ||
-		((grid[0].y == grid[1].y) && (grid[1].x == grid[2].x))) 
-	{
-		int low, high;
-		if (grid[0].x < grid[2].x)	low = grid[0].x, high = grid[2].x;
-		else						low = grid[2].x, high = grid[0].x;
-		rasterMap = std::vector<std::pair<int, int>>(collisionSize.y+1, { low, high });
-	}
+
+	auto aabbMap{ 
+		[&]() {
+			return std::vector<std::pair<int,int>>(collisionSize.y + 1, 
+				std::make_pair<>(collisionPos.x, collisionPos.x + collisionSize.x));
+		} 
+	};
+	if ((grid[0].y == grid[1].y) && (grid[1].x == grid[2].x) && (grid[2].y == grid[3].y))
+		rasterMap = aabbMap();
+
+	else if ((grid[0].x == grid[1].x) && (grid[1].y == grid[2].y) && (grid[2].x == grid[3].x))
+		rasterMap = aabbMap();
+
+
 
 	// -----------------------------------------------
 	//					OBB
 	// -----------------------------------------------
+
 	else {
-
-		std::array<std::vector<char>, 2> sides;
-
-		// modulo 180°
-		if (angle & 0x2)
-			std::rotate(grid.begin(), grid.begin() + 2, grid.end());
-
-		char flippedSide{ -1 };
+		rasterMap = std::vector<std::pair<int, int>>(collisionSize.y + 1);
 
 		// https://www.youtube.com/watch?v=h3gDB89h0os
 		auto rasterize{
-			[&sides, &flippedSide](sf::Vector2i start, sf::Vector2i end, bool side) -> void {
-				if (std::abs(end.y - start.y) > std::abs(end.x - start.x)) {
-					std::swap(start.x, start.y);
-					std::swap(end.x, end.y);
-					flippedSide = side;
-				}
-				if (start.y > end.y)
-					start.y -= 2 * (start.y - end.y);
-				if (start.x > end.x)
-					start.x -= 2 * (start.x - end.x);
+			[&](sf::Vector2i start, sf::Vector2i end)  -> void {
+				bool side = (end.y > start.y);
+				bool direction = (end.x > start.x);
 
-				sf::Vector2i delta = end - start;
+				sf::Vector2i delta = {
+					std::abs(end.x - start.x),
+					std::abs(end.y - start.y),
+				};
+				start.y -= collisionPos.y;
+
+				int increment{ 0 },* pIncrement{ &increment };
+				int t{ 0 },* pt{ &t };
+				if (delta.y > delta.x) {
+					std::swap(delta.x, delta.y);
+					std::swap(pt, pIncrement);
+				}
+
 				int parameter = 2 * delta.y - delta.x;
+				for (; (*pt) <= delta.x; (*pt)++) {
+					if (side)
+						rasterMap[start.y + increment].second = start.x + (direction ? t : -t);
+					else
+						rasterMap[start.y - increment].first = start.x + (direction ? t : -t);
 
-				for (auto x{ start.x }; x < end.x; ++x)
 					if (parameter > 0) {
-						parameter = parameter + 2 * delta.y - 2 * delta.x;
-						sides[side].push_back(0);
+						(*pIncrement)++;
+						parameter += (2 * delta.y - 2 * delta.x);
 					}
-					else {
-						parameter = parameter + 2 * delta.y;
-						sides[side].push_back(1);
-					}
-			}
-		};
-
-
-		auto calcSides{
-			[&](int index, int delta, bool side) -> void {
-				sf::Vector2i y1{ grid[index].x, grid[index].y - collisionPos.y  };
-				sf::Vector2i y2{ grid[delta].x, grid[delta].y - collisionPos.y  };
-				index = 0; delta = 0;
-				int* pIndex{ &index },* pDelta{ &delta };
-				int shift = (side ? -1 : 1);
-				if (flippedSide == side)
-					std::swap(pIndex, pDelta);
-				while (true) {
-					rasterMap[y1.y + delta].second = std::max(y1.x + (shift * index), rasterMap[y1.y + delta].second);
-					rasterMap[y2.y - delta].first = std::min(y2.x - (shift * index), rasterMap[y2.y - delta].first);
-					if ((*pIndex) == sides[side].size())
-						break;
-					if (!sides[side][(*pIndex)])
-						(*pDelta)++;
-					(*pIndex)++;
+					else
+						parameter += (2 * delta.y);
 				}
 			}
 		};
 
-		rasterMap = std::vector<std::pair<int, int>>(collisionSize.y + 1, std::make_pair(INT_MAX, INT_MIN));
-		if (deg90) {
-			rasterize(grid[1], grid[2], 0);
-			rasterize(grid[2], grid[3], 1);
-			calcSides(3, 1, 0);
-			calcSides(0, 2, 1);
-		}
-		else {
-			rasterize(grid[0], grid[1], 0);
-			rasterize(grid[1], grid[2], 1);
-			calcSides(0, 2, 0);
-			calcSides(1, 3, 1);
-		}
+		rasterize(grid[0], grid[1]);
+		rasterize(grid[1], grid[2]);
+		rasterize(grid[2], grid[3]);
+		rasterize(grid[3], grid[0]);
+
 	}
+
+
 
 
 
@@ -383,8 +306,8 @@ void SonicScene::tileScan() {
 			[&]() -> void {
 				auto xRanges = std::vector<std::pair<int,int>>(rasterMap.begin() + top.y, rasterMap.begin() + bottom.y + 1);
 
-				std::vector<std::size_t> rightI(xRanges.size() - 1);
-				auto leftI = rightI;
+				std::vector<int> rightI(xRanges.size() - 1);
+				std::vector<int> leftI = rightI;
 
 				std::iota(rightI.begin(), rightI.end(),		static_cast<std::size_t>(!deg90));
 				std::iota(leftI.begin(), leftI.end(),		static_cast<std::size_t>(deg90));
@@ -440,7 +363,19 @@ void SonicScene::tileScan() {
 
 		tileCollision.setPosition(map.toWorld({ left, top.y + collisionPos.y }));
 		tileCollision.setSize({ (right - left + 1) * map.getTileSize(), (bottom.y - top.y + 1) * map.getTileSize() });
+
+
+		//////////////////////////////////////////////////////////////////
+		// Resolve collision
+		//////////////////////////////////////////////////////////////////
+		//player.setPosition({ player.getX(), tileCollision.getPosition().y-player.getHeight()/2.f});
+		//player.setVel(player.getVelX(), 0);
 	}
+
+
+
+
+	// no collision 
 	else {
 		tileCollision.setSize({ 0,0 });
 	}

@@ -30,7 +30,7 @@ public:
 class Parallax_Topman : public Parallax {
 public:
 	Parallax_Topman() :
-		Parallax("wilywars_top", 0.25f, 4.f) {
+		Parallax("wilywars_top", 0.25f, 2.f) {
 		;
 	}
 };

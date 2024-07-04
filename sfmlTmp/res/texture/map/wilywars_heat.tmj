@@ -71,7 +71,7 @@
         {
          "name":"gameScale",
          "type":"float",
-         "value":4
+         "value":3
         }],
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

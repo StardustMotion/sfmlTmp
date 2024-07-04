@@ -3,11 +3,10 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "utils/obj.tsx",
+    "activeFile": "wilywars_heat.tmx",
     "expandedProjectPaths": [
-        "utils",
-        ".",
-        "templates"
+        "templates",
+        "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -101,11 +100,11 @@
             "expandedObjectLayers": [
                 3
             ],
-            "scale": 5.5,
+            "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 47.18181818181819,
-                "y": 34.909090909090914
+                "x": 209,
+                "y": 136
             }
         },
         "wilywars_heat.tmx#obj": {

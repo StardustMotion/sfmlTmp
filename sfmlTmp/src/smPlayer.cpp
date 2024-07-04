@@ -9,7 +9,6 @@ Player::Player() {
 	boundingBox.setFillColor(sf::Color(255, 0, 0, 128));
 	boundingBox.setSize({ initWidth * initScale, initHeight * initScale });
 	boundingBox.setOrigin(initWidth * initScale / 2.f, initHeight * initScale / 2.f);
-	setAngle(15.f+255.f);
 }
 
 
@@ -31,8 +30,6 @@ void Player::update(double deltaT) {
 	else if (VInput::isHeld(VInput::DOWN)) {
 		setVel(getVelX(), std::min(getVelY() + sped, +maxSpd));
 	}
-	else if (std::abs(getVelY()) < sped * 4.f)
-		setVel(getVelX(), 0);
 
 
 	if (VInput::isPressed(VInput::C))
